@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ruta Chasqui · WebMCP en acción</title>
+    <meta name="description" content="Demo de WebMCP: un sitio de experiencias en Cusco que expone tools a los agentes. Precios ficticios. DevFest Cusco 2026." />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" />
+    <!-- Origin Trial de WebMCP (Chrome 149+): pega aquí tu token para tu dominio.
+    <meta http-equiv="origin-trial" content="TU_TOKEN" /> -->
+    <script>
+      try {
+        const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('chasqui.theme');
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!-- Barra de la DEMO (no es parte del sitio) -->
+    <header class="top">
+      <span class="demo-tag">Demo · WebMCP en acción</span>
+      <div class="badges">
+        <span class="badge" data-mc-badge>WebMCP…</span>
+        <span class="badge" data-engine-badge>Motor…</span>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn" data-redesign aria-pressed="false">Rediseñar página</button>
+        <button type="button" class="btn ghost" data-reset>Reiniciar</button>
+        <button type="button" class="btn ghost icon" data-theme aria-label="Cambiar tema">◐</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- ══════ EL SITIO (lo que usan las personas… y los agentes) ══════ -->
+      <section class="site" id="site" aria-label="Sitio Ruta Chasqui">
+        <nav class="site-nav">
+          <a class="brand" href="./"><span class="logo" aria-hidden="true">RC</span><b>Ruta Chasqui</b></a>
+          <span class="nav-links"><a href="#">Experiencias</a><a href="#">Destinos</a><a href="#">Ayuda</a></span>
+          <span class="nav-user">ES · PEN</span>
+        </nav>
+        <div class="hero">
+          <p class="crumbs">Perú › Cusco</p>
+          <h1 data-hero-title>Experiencias en Cusco</h1>
+          <p class="muted" data-hero-sub>Tours con guías locales. Cancelación gratuita hasta 24 h antes. Precios de demostración.</p>
+        </div>
+
+        <!-- Tool DECLARATIVA: este formulario es la tool buscar_experiencias -->
+        <form id="buscador" class="search" toolname="buscar_experiencias" tooldescription="Busca experiencias en Cusco por zona, tipo y presupuesto máximo por persona en soles. Devuelve id, nombre, precio, jornada, altitud y cupos.">
+          <label><span>Zona</span>
+            <select name="zona" toolparamdescription="Zona de Cusco">
+              <option>Todas</option><option>Ciudad del Cusco</option><option>Valle Sagrado</option><option>Machu Picchu</option><option>Montañas</option>
+            </select>
+          </label>
+          <label><span>Tipo</span>
+            <select name="tipo" toolparamdescription="Tipo de experiencia">
+              <option value="cualquiera">Cualquiera</option><option value="cultura">Cultura</option><option value="aventura">Aventura</option><option value="gastronomía">Gastronomía</option><option value="naturaleza">Naturaleza</option>
+            </select>
+          </label>
+          <label><span>Precio máx. (S/)</span><input name="max" type="number" min="0" step="10" placeholder="sin límite" toolparamdescription="Precio máximo por persona en soles" /></label>
+          <button type="submit" class="btn primary" data-search-btn>Buscar</button>
+        </form>
+
+        <div class="site-body">
+          <div>
+            <p class="results-head" data-results-head></p>
+            <div class="results" id="results" aria-live="polite"></div>
+          </div>
+          <aside class="mi-ruta" id="mi-ruta" aria-label="Mi ruta"></aside>
+        </div>
+      </section>
+
+      <!-- ══════ PANEL DE AGENTES ══════ -->
+      <aside class="agents" aria-label="Agentes">
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="webmcp">Con WebMCP</button>
+          <button role="tab" aria-selected="false" data-tab="clicker">Con clics</button>
+          <button role="tab" aria-selected="false" data-tab="tools">Tools</button>
+        </div>
+
+        <div class="tab-body" data-body="webmcp clicker">
+          <form class="ask" data-ask>
+            <textarea name="prompt" rows="2" aria-label="Encargo para el agente">Arma Machu Picchu el día 2 y el Valle Sagrado el día 3 para 2 personas</textarea>
+            <div class="presets" data-presets></div>
+            <div class="row">
+              <button class="btn primary" type="submit" data-run>Enviar encargo</button>
+              <button class="btn" type="button" data-compare>Comparar ambos</button>
+            </div>
+          </form>
+          <div class="score" data-score></div>
+          <ol class="timeline" data-timeline aria-live="polite"></ol>
+        </div>
+
+        <div class="tab-body" data-body="tools" hidden>
+          <p class="muted small">Lo que el agente descubre con <code>document.modelContext.getTools()</code>:</p>
+          <ul class="tool-list" data-tools></ul>
+          <p class="muted small" data-events></p>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Elegir día (lo usan las personas y el agente de clics) -->
+    <dialog class="sheet" id="add-dialog">
+      <form method="dialog" data-add-form>
+        <h2 data-add-title>Agregar a mi ruta</h2>
+        <label><span>Día</span><select name="dia"><option value="1">Día 1</option><option value="2">Día 2</option><option value="3">Día 3</option><option value="4">Día 4</option><option value="5">Día 5</option></select></label>
+        <label><span>Personas</span><input name="personas" type="number" min="1" max="10" value="1" /></label>
+        <div class="row"><button class="btn ghost" value="cancel">Cancelar</button><button class="btn primary" value="ok" data-add-ok>Confirmar</button></div>
+      </form>
+    </dialog>
+
+    <!-- Confirmación humana para la acción irreversible (consequentialHint) -->
+    <dialog class="sheet confirm" id="confirm-dialog">
+      <form method="dialog">
+        <p class="eyebrow">Un agente quiere reservar</p>
+        <h2>¿Confirmas la reserva?</h2>
+        <div data-confirm-body></div>
+        <p class="muted small">Acción irreversible (<code>consequentialHint</code>). Solo tú puedes confirmarla.</p>
+        <div class="row"><button class="btn ghost" value="cancel" data-confirm-no>Cancelar</button><button class="btn primary" value="ok" data-confirm-yes>Confirmar reserva</button></div>
+      </form>
+    </dialog>
+
+    <div class="toast" hidden role="status"></div>
+    <div class="fake-cursor" hidden aria-hidden="true"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

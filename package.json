@@ -1,0 +1,22 @@
+{
+  "name": "web-mcp-devfest26-cusco",
+  "private": true,
+  "description": "WebMCP en acción — DevFest Cusco 2026: deck interactivo (slides/) y demo Ruta Chasqui con WebMCP + Gemini Nano (demo/)",
+  "workspaces": [
+    "slides",
+    "demo"
+  ],
+  "scripts": {
+    "dev:slides": "npm run dev -w slides",
+    "dev:demo": "npm run dev -w demo",
+    "build": "npm run build -w slides && npm run build -w demo",
+    "test": "npm run test -w slides && npm run test -w demo",
+    "format": "prettier --write .",
+    "deploy": "npm run build && firebase deploy",
+    "clips": "node scripts/record-clips.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.10",
+    "playwright-core": "^1.64.1"
+  }
+}

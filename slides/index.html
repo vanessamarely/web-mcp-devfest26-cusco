@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WebMCP en acción — DevFest Cusco 2026</title>
+    <meta name="description" content="WebMCP en acción: qué es MCP, qué es WebMCP y cómo hacer, de verdad, una web agéntica. DevFest Cusco 2026." />
+    <link rel="icon" href="/brand/logo-icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" />
+    <!-- En <head> (no importado desde JS): deck-stage copia las hojas de estilo a las miniaturas al iniciar. -->
+    <link rel="stylesheet" href="/src/deck/deck.css" />
+    <script>
+      // Tema y proporción antes del primer pintado (sin parpadeo): claro DevFest por defecto.
+      try {
+        const p = new URLSearchParams(location.search);
+        const t = p.get('theme') || localStorage.getItem('wmcp-cusco.deck.theme');
+        if (t === 'dark') document.documentElement.dataset.theme = 'dark';
+        if (p.has('contrast') || localStorage.getItem('wmcp-cusco.deck.contrast') === '1') document.documentElement.dataset.contrast = 'high';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <deck-stage width="1280" height="720">
+      <!-- ═════════════ PORTADA ═════════════ -->
+      <section data-id="portada" data-label="Portada" class="cover">
+        <div class="apus" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="frame cover-frame">
+          <img class="badge-img" src="/brand/web-badge.svg" alt="Web @DevFest Cusco" />
+          <p class="eyebrow">// MCP · WebMCP · web agéntica</p>
+          <h1 class="cover-title"><span>WebMCP</span><span><span class="hl">en acción</span></span></h1>
+          <p class="cover-sub">Cómo hacer, de verdad, una web agéntica</p>
+          <div class="speaker">
+            <img src="/brand/vanessa.png" alt="" />
+            <div><strong>Vanessa Aristizabal</strong><span>GDE Web &amp; Angular · GitHub Star</span></div>
+          </div>
+        </div>
+        <div class="cover-chasquis" data-chasquis="3" aria-hidden="true"></div>
+        <div class="awana bottom" aria-hidden="true"></div>
+        <div class="awana-runner" data-runner="4" aria-hidden="true"></div>
+      </section>
+
+      <!-- ═════════════ ÚNETE ═════════════ -->
+      <section data-id="unete" data-label="Únete">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Esta charla también es una app</p>
+          <h2 class="title">Escanea, juega por el podio y <span class="hl">crea tu chasqui</span></h2>
+          <div class="join-grid">
+            <div class="qr-card">
+              <div data-qr="live"></div>
+              <strong>Únete a la charla</strong>
+              <span data-live-url>…</span>
+            </div>
+            <div class="stack">
+              <div class="counters">
+                <div class="box blue"><div class="counter-big"><span data-count="players">0</span></div><small class="mono">en la sala</small></div>
+                <div class="box yellow"><div class="counter-big"><span data-count="chasquis">0</span></div><small class="mono">chasquis</small></div>
+              </div>
+              <div class="box red"><h3 class="ic"><i data-lucide="trophy"></i> 3 preguntas, 1 podio</h3><p>Acierta rápido: suma puntos con la hora del servidor.</p></div>
+              <div class="box green"><h3 class="ic"><i data-lucide="notebook-pen"></i> Notas sin perder el hilo</h3><p>Si escribes, tu celular <b>no cambia de slide</b> hasta que guardes.</p></div>
+              <div class="box"><h3 class="ic"><i data-lucide="download"></i> Tu memoria al final</h3><p>PDF o HTML con cada slide, tus notas y tu chasqui.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ BIO ═════════════ -->
+      <section data-id="bio" data-label="Quién soy">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Quién soy</p>
+          <div class="bio">
+            <img class="bio-photo" src="/brand/vanessa.png" alt="Vanessa Aristizabal" />
+            <div>
+              <h2>Vanessa Aristizabal</h2>
+              <p class="sub" style="margin: 0">Software Engineer</p>
+              <ul>
+                <li>Ingeniera de Sistemas y Magíster en Ingeniería</li>
+                <li>Google Developer Expert — Web Technologies &amp; Angular</li>
+                <li>GitHub Star · Creadora de contenido</li>
+              </ul>
+              <div class="socials">
+                <span class="pill"><i data-lucide="camera"></i> <b>@vanessamarelycode</b></span>
+                <span class="pill"><i data-lucide="circle-play"></i> <b>vanessamarely</b></span>
+                <span class="pill"><i data-lucide="git-branch"></i> <b>vanessamarely</b></span>
+                <span class="pill"><i data-lucide="globe"></i> <b>vanessamarely.dev</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ ¿WEB AGÉNTICA? ═════════════ -->
+      <section data-id="web-agentica" data-label="¿Web agéntica?">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Qué significa “web agéntica”</p>
+          <h2 class="title">No es un chatbot: es tu web <span class="hl">recibiendo encargos</span></h2>
+          <div class="dual reveal">
+            <div class="web-frame" style="--i: 2"><span class="k1">Tu web</span></div>
+            <div class="actor" style="--i: 0"><span class="ico"><i data-lucide="user"></i></span><div><b>Persona</b><small>mira y hace clic</small></div></div>
+            <div class="flowline" style="--i: 1"><span>clics</span></div>
+            <div class="door ui" style="--i: 3"><b>Interfaz</b><small>botones · formularios</small></div>
+            <div class="actor agent" style="--i: 4"><span class="ico"><i data-lucide="bot"></i></span><div><b>Agente</b><small>recibe un encargo</small></div></div>
+            <div class="flowline fast" style="--i: 5"><span>tools</span></div>
+            <div class="door tools" style="--i: 6"><b>Tools WebMCP</b><small>nombre · descripción · JSON Schema</small></div>
+            <div class="logic" style="--i: 7"><i data-lucide="database"></i> Misma lógica · mismo estado</div>
+          </div>
+          <div class="three-verbs reveal">
+            <span class="pill blue" style="--i: 8"><i data-lucide="eye"></i> Entender</span>
+            <span class="pill green" style="--i: 9"><i data-lucide="mouse-pointer-click"></i> Usar</span>
+            <span class="pill yellow" style="--i: 10"><i data-lucide="shield-check"></i> Confiar</span>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ PROBLEMA ═════════════ -->
+      <section data-id="problema" data-label="Turista sin mapa">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Cómo usa hoy un agente tu web</p>
+          <h2 class="title">Como un <span class="hl">turista sin mapa</span></h2>
+          <div class="vs-lanes">
+            <div class="lane bad reveal">
+              <h3><i data-lucide="scan-eye"></i> Mirar y adivinar</h3>
+              <ol class="steps-mini">
+                <li style="--i: 0">Captura o DOM completo <em>(miles de tokens)</em></li>
+                <li style="--i: 1">“¿Este botón será el de reservar?”</li>
+                <li style="--i: 2">Clic, espera, nueva captura…</li>
+                <li style="--i: 3">Cambiaste un texto → <b>se pierde</b></li>
+              </ol>
+            </div>
+            <div class="lane-vs">vs</div>
+            <div class="lane good reveal">
+              <h3><i data-lucide="map"></i> Seguir el mapa</h3>
+              <div class="tool-chip" style="--i: 4"><code>buscar_experiencias</code><span>{ zona, max }</span></div>
+              <div class="tool-chip" style="--i: 5"><code>agregar_a_ruta</code><span>{ id, dia }</span></div>
+              <div class="tool-chip" style="--i: 6"><code>reservar_ruta</code><span>confirmación humana</span></div>
+              <p class="small muted" style="--i: 7">Nombre + descripción + JSON Schema. El diseño puede cambiar.</p>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ 01 MCP ═════════════ -->
+      <section data-id="sec-mcp" data-label="01 ¿Qué es MCP?" class="section-slide">
+        <div class="frame">
+          <p class="sec-num">01</p>
+          <h2 class="sec-title">¿Qué es <span class="hl">MCP</span>?</h2>
+          <p class="lead">Primero el protocolo que inspiró todo.</p>
+        </div>
+        <div class="section-art sec-blue">
+          <div class="qhapaq" aria-hidden="true"></div>
+          <div class="runner">
+            <p class="bubble">¡Llevo un quipu! MCP es el idioma común entre agentes y sistemas.</p>
+            <div class="runner-art" data-runner="0" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="andenes" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+
+      <!-- ═════════════ QUÉ ES MCP ═════════════ -->
+      <section data-id="que-es-mcp" data-label="Model Context Protocol">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Model Context Protocol · estándar abierto</p>
+          <h2 class="title">MCP: un idioma común entre <span class="hl">agentes y sistemas</span></h2>
+          <div class="flow flow-3 reveal">
+            <div class="node" style="--i: 0"><span class="k1">Host</span><span class="v">Tu IDE o chat</span><span class="d">Claude, Gemini CLI, Antigravity, VS Code…</span></div>
+            <div class="arrow" style="--i: 1"></div>
+            <div class="node" style="--i: 2"><span class="k1">Cliente MCP</span><span class="v">Descubre</span><span class="d">Pregunta qué hay y se lo pasa al modelo.</span></div>
+            <div class="arrow" style="--i: 3"></div>
+            <div class="node strong" style="--i: 4"><span class="k1">Servidor MCP</span><span class="v">Expone</span><span class="d">Tus sistemas: BD, APIs, archivos.</span></div>
+          </div>
+          <div class="prims reveal">
+            <div class="box blue" style="--i: 5"><h3 class="ic"><i data-lucide="wrench"></i> Tools</h3><p>Acciones: consultar_cupos, crear_ticket.</p></div>
+            <div class="box green" style="--i: 6"><h3 class="ic"><i data-lucide="database"></i> Resources</h3><p>Datos que el modelo puede leer.</p></div>
+            <div class="box yellow" style="--i: 7"><h3 class="ic"><i data-lucide="message-square-text"></i> Prompts</h3><p>Plantillas reutilizables.</p></div>
+            <div class="box red" style="--i: 8"><h3 class="ic"><i data-lucide="cable"></i> Transporte</h3><p>stdio (local) o Streamable HTTP.</p></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ MCP CÓDIGO ═════════════ -->
+      <section data-id="mcp-codigo" data-label="Un servidor MCP">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Un servidor MCP (TypeScript SDK)</p>
+          <h2 class="title">Nombre + descripción + schema + <span class="hl">función</span></h2>
+          <div class="code-grid">
+            <div class="code sm" data-code="mcp" data-focus='[["5","Un servidor con nombre y versión"],["7-9","La tool: nombre, descripción y schema de entrada"],["10-12","La función que el modelo puede invocar"],["14","Transporte stdio: un proceso aparte"]]'><div class="bar"><span>mcp-server/index.ts</span><span>MCP</span></div><pre></pre></div>
+            <div class="stack side-notes">
+              <div class="box blue"><h3>Vive en un proceso</h3><p>Tiene sus credenciales y no ve la pestaña del usuario.</p></div>
+              <div class="box green"><h3>Ideal para integrar</h3><p>Inventario, base de datos, APIs internas.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ PREGUNTA 1 ═════════════ -->
+      <section data-id="q1" data-label="Pregunta 1 · MCP" data-q="q1" class="poll-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Pregunta 1 de 3 · MCP · responde en tu celular</p>
+          <h2 class="title poll-q" data-q-text="q1"></h2>
+          <div class="poll" data-poll="q1"></div>
+          <div class="poll-foot"><span class="pill"><i data-lucide="users"></i> <b data-total>0</b> respuestas</span><p class="explain" data-explain hidden></p><button class="btn-reveal" type="button" data-reveal hidden>Revelar <kbd>V</kbd></button></div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ 02 WEBMCP ═════════════ -->
+      <section data-id="sec-webmcp" data-label="02 ¿Qué es WebMCP?" class="section-slide">
+        <div class="frame">
+          <p class="sec-num">02</p>
+          <h2 class="sec-title">¿Qué es <span class="hl">WebMCP</span>?</h2>
+          <p class="lead">¿Y si las tools vivieran en la página que el usuario ya tiene abierta?</p>
+        </div>
+        <div class="section-art sec-green">
+          <div class="qhapaq" aria-hidden="true"></div>
+          <div class="runner">
+            <p class="bubble">Ahora el quipu viaja dentro de tu página.</p>
+            <div class="runner-art" data-runner="1" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="andenes" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+
+      <!-- ═════════════ QUÉ ES WEBMCP ═════════════ -->
+      <section data-id="que-es-webmcp" data-label="Las tools viven en la página">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Estándar web propuesto · W3C Web Machine Learning CG</p>
+          <h2 class="title">WebMCP: <span class="hl">tu página es el servidor</span> de tools</h2>
+          <div class="flow flow-3 reveal">
+            <div class="node" style="--i: 0"><span class="k1">01 · Agente</span><span class="v">Intención</span><span class="d">Gemini Nano en la página, el agente del navegador o una extensión.</span></div>
+            <div class="arrow" style="--i: 1"></div>
+            <div class="node strong" style="--i: 2"><span class="k1">02 · Navegador</span><span class="v mono-v">document.modelContext</span><span class="d">Media, valida el schema y aplica permisos.</span></div>
+            <div class="arrow" style="--i: 3"></div>
+            <div class="node" style="--i: 4"><span class="k1">03 · Tu página</span><span class="v">UI + estado</span><span class="d">La misma lógica de tus botones, con la sesión del usuario.</span></div>
+          </div>
+          <div class="status-row reveal">
+            <span class="pill blue" style="--i: 5"><i data-lucide="code"></i> Imperativa: <b>registerTool()</b></span>
+            <span class="pill green" style="--i: 6"><i data-lucide="file-code"></i> Declarativa: <b>&lt;form toolname&gt;</b></span>
+            <span class="pill yellow" style="--i: 7"><i data-lucide="flask-conical"></i> Origin Trial · Chrome 149+</span>
+            <span class="pill" style="--i: 8"><i data-lucide="flag"></i> <code>#enable-webmcp-testing</code></span>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ MCP vs WEBMCP ═════════════ -->
+      <section data-id="mcp-vs-webmcp" data-label="MCP vs. WebMCP">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Mismo vocabulario, distinta capa</p>
+          <h2 class="title">No compiten: <span class="hl">se complementan</span></h2>
+          <div class="lanes reveal">
+            <div class="lane-row" style="--i: 0">
+              <span class="lane-tag pill blue">MCP</span>
+              <div class="node"><span class="k1">Host</span><span class="v">IDE o chat</span><span class="d">+ el modelo</span></div>
+              <div class="flowline"><span>stdio · HTTP</span></div>
+              <div class="node strong"><span class="k1">Servidor MCP</span><span class="v">Proceso aparte</span><span class="d">con sus credenciales</span></div>
+              <div class="flowline"></div>
+              <div class="node"><span class="k1">Tus sistemas</span><span class="v">BD · APIs</span><span class="d">inventario, archivos</span></div>
+            </div>
+            <div class="shared" style="--i: 1"><i data-lucide="wrench"></i> Mismo vocabulario: <b>tools + JSON Schema</b></div>
+            <div class="lane-row" style="--i: 2">
+              <span class="lane-tag pill green">WebMCP</span>
+              <div class="node"><span class="k1">Agente</span><span class="v">Nano · navegador</span><span class="d">o una extensión</span></div>
+              <div class="flowline fast"><span>executeTool</span></div>
+              <div class="node strong"><span class="k1">Navegador</span><span class="v mono-v">document.modelContext</span><span class="d">valida y aplica permisos</span></div>
+              <div class="flowline fast"></div>
+              <div class="node"><span class="k1">Tu página</span><span class="v">UI + estado</span><span class="d">con la sesión del usuario</span></div>
+            </div>
+          </div>
+          <p class="example reveal"><span style="--i: 3"><b>Cusco:</b> consultar cupos oficiales → <b>MCP</b> · agregar el tour a <i>mi</i> ruta y confirmarlo → <b>WebMCP</b></span></p>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ API IMPERATIVA ═════════════ -->
+      <section data-id="api-imperativa" data-label="API imperativa">
+        <div class="frame card-frame">
+          <p class="eyebrow">// API imperativa</p>
+          <h2 class="title"><code class="t-code">registerTool()</code> + <span class="hl">AbortSignal</span></h2>
+          <div class="code-grid">
+            <div class="code sm" data-code="imperative" data-focus='[["1","Un AbortController por tool (o por grupo)"],["3-6","Nombre con verbo exacto y descripción clara"],["6-13","JSON Schema: lo que el agente debe mandar"],["14-17","execute llama la MISMA lógica que el botón"],["18","Las opciones: signal (y exposedTo para otros orígenes)"],["20","abort() y la tool desaparece"]]'><div class="bar"><span>demo/src/tools.ts</span><span>WebMCP</span></div><pre></pre></div>
+            <div class="stack side-notes">
+              <div class="box blue"><h3>execute(input, { signal })</h3><p>Recibe la entrada validada; el signal cancela trabajo largo.</p></div>
+              <div class="box yellow"><h3>Sin nombres repetidos</h3><p>registerTool lanza un error si el nombre ya existe.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ API DECLARATIVA ═════════════ -->
+      <section data-id="api-declarativa" data-label="API declarativa">
+        <div class="frame card-frame">
+          <p class="eyebrow">// API declarativa</p>
+          <h2 class="title">Tu formulario <span class="hl">ya es una tool</span></h2>
+          <div class="code-grid">
+            <div class="code sm" data-code="declarative" data-focus='[["1-2","toolname + tooldescription registran la tool"],["3-6","toolparamdescription describe cada campo del schema"],["11-15","agentInvoked: lo envió un agente → respondWith() devuelve el resultado"]]'><div class="bar"><span>demo/index.html</span><span>HTML</span></div><pre></pre></div>
+            <div class="stack side-notes">
+              <div class="box green"><h3><code>toolautosubmit</code></h3><p>Envía sin esperar el clic del usuario.</p></div>
+              <div class="box blue"><h3><code>:tool-form-active</code></h3><p>CSS para mostrar qué formulario está usando el agente.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ QUÉ CAMBIÓ ═════════════ -->
+      <section data-id="que-cambio" data-label="Lo que cambió">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Borrador W3C del 27 de octubre de 2026 · docs de Chrome</p>
+          <h2 class="title">Si me viste en otra charla: <span class="hl">esto cambió</span></h2>
+          <div class="changes-grid reveal">
+            <div class="chg head"><span>Antes (Quito · Debugging)</span><span></span><span>Ahora</span></div>
+            <div class="chg" style="--i: 0"><code class="old">navigator.modelContext</code><span class="to" aria-label="ahora"></span><code class="new">document.modelContext</code></div>
+            <div class="chg" style="--i: 1"><code class="old">provideContext() · clearContext()</code><span class="to" aria-label="ahora"></span><code class="new">registerTool(tool, { signal }) + abort()</code></div>
+            <div class="chg" style="--i: 2"><code class="old">execute(input, client) · requestUserInteraction()</code><span class="to" aria-label="ahora"></span><code class="new">execute(input, { signal }) + consequentialHint</code></div>
+            <div class="chg" style="--i: 3"><code class="old">solo readOnlyHint</code><span class="to" aria-label="ahora"></span><code class="new">readOnlyHint · untrustedContentHint · consequentialHint · debugging</code></div>
+            <div class="chg" style="--i: 4"><code class="old">executeTool(tool, '{json}')</code><span class="to" aria-label="ahora"></span><code class="new">executeTool(tool, { … }) · getTools({ fromOrigins }) · exposedTo</code></div>
+            <div class="chg" style="--i: 5"><code class="old">Canary + flag</code><span class="to" aria-label="ahora"></span><code class="new">Origin Trial Chrome 149+ · eventos toolchange · toolactivated · toolcancel</code></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ PREGUNTA 2 ═════════════ -->
+      <section data-id="q2" data-label="Pregunta 2 · API" data-q="q2" class="poll-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Pregunta 2 de 3 · La API de WebMCP · responde en tu celular</p>
+          <h2 class="title poll-q" data-q-text="q2"></h2>
+          <div class="poll" data-poll="q2"></div>
+          <div class="poll-foot"><span class="pill"><i data-lucide="users"></i> <b data-total>0</b> respuestas</span><p class="explain" data-explain hidden></p><button class="btn-reveal" type="button" data-reveal hidden>Revelar <kbd>V</kbd></button></div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ 03 ¿QUÉ PODEMOS HACER? ═════════════ -->
+      <section data-id="sec-para-que" data-label="03 ¿Qué podemos hacer?" class="section-slide">
+        <div class="frame">
+          <p class="sec-num">03</p>
+          <h2 class="sec-title">¿Qué podemos <span class="hl">hacer</span> con WebMCP?</h2>
+          <p class="lead">“¿Para qué, si el agente ya puede hacer clic?”</p>
+        </div>
+        <div class="section-art sec-yellow">
+          <div class="qhapaq" aria-hidden="true"></div>
+          <div class="runner">
+            <p class="bubble">Con mapa no pregunto el camino: llamo a la tool.</p>
+            <div class="runner-art" data-runner="2" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="andenes" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+
+      <!-- ═════════════ CLICS vs TOOLS ═════════════ -->
+      <section data-id="clics-vs-tools" data-label="Clics vs. tools">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Lo medimos en la demo, en vivo</p>
+          <h2 class="title">¿Por qué no dejar que el agente <span class="hl">haga clic</span>?</h2>
+          <div class="meter-grid reveal">
+            <div class="meter-head"></div><div class="meter-head bad"><i data-lucide="mouse-pointer-click"></i> Agente de clics</div><div class="meter-head good"><i data-lucide="wrench"></i> Agente con WebMCP</div>
+            <div class="meter-label" style="--i: 0">Pasos</div><div class="meter bad" style="--i: 0; --v: 0.9"><i></i><span>leer, adivinar, clic, repetir</span></div><div class="meter good" style="--i: 0; --v: 0.25"><i></i><span>1 llamada por intención</span></div>
+            <div class="meter-label" style="--i: 1">Tokens</div><div class="meter bad" style="--i: 1; --v: 0.95"><i></i><span>el DOM completo en cada paso</span></div><div class="meter good" style="--i: 1; --v: 0.15"><i></i><span>nombre + schema + resultado</span></div>
+            <div class="meter-label" style="--i: 2">Rediseño</div><div class="meter bad" style="--i: 2; --v: 0.1"><i></i><span>se pierde</span></div><div class="meter good" style="--i: 2; --v: 1"><i></i><span>sigue funcionando</span></div>
+            <div class="meter-label" style="--i: 3">Control</div><div class="meter bad" style="--i: 3; --v: 0.2"><i></i><span>improvisa en tu checkout</span></div><div class="meter good" style="--i: 3; --v: 0.95"><i></i><span>tú decides qué confirma</span></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ ANDENES ═════════════ -->
+      <section data-id="andenes" data-label="Los 3 andenes">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Cómo se hace, de verdad, una web agéntica</p>
+          <h2 class="title">Se construye <span class="hl">por andenes</span></h2>
+          <div class="terraces reveal">
+            <div class="terrace t3" style="--i: 2"><span class="lvl">3</span><div><h3><i data-lucide="shield-check"></i> Confiable</h3><p>Valida en código · confirma lo irreversible · marca el contenido de terceros.</p></div></div>
+            <div class="terrace t2" style="--i: 1"><span class="lvl">2</span><div><h3><i data-lucide="wrench"></i> Accionable</h3><p>Una tool de WebMCP por intención real: buscar, agregar, reservar.</p></div></div>
+            <div class="terrace t1" style="--i: 0"><span class="lvl">1</span><div><h3><i data-lucide="accessibility"></i> Legible</h3><p>HTML semántico y accesible: lo que sirve a un lector de pantalla, sirve a un agente.</p></div></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ CASOS ═════════════ -->
+      <section data-id="casos" data-label="Qué podemos hacer">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Hoy, con el Origin Trial</p>
+          <h2 class="title">Cinco cosas que <span class="hl">ya puedes hacer</span></h2>
+          <div class="cases reveal">
+            <div class="case blue" style="--i: 0"><span class="ico"><i data-lucide="globe"></i></span><h3>Agentes del navegador</h3><p>Usan tu sitio sin scraping. Prueba con <b>Model Context Tool Inspector</b>.</p></div>
+            <div class="case green" style="--i: 1"><span class="ico"><i data-lucide="cpu"></i></span><h3>Tu asistente in-page</h3><p><b>Gemini Nano</b> (Prompt API): sin servidor, sin API key, datos en el equipo.</p></div>
+            <div class="case yellow" style="--i: 2"><span class="ico"><i data-lucide="mic"></i></span><h3>Voz y accesibilidad</h3><p>“Agrega lo de siempre” = 1 tool, no 12 clics.</p></div>
+            <div class="case red" style="--i: 3"><span class="ico"><i data-lucide="bug"></i></span><h3>QA y debugging</h3><p><code>annotations.debugging</code> para que tu agente de código vea el estado.</p></div>
+            <div class="case" style="--i: 4"><span class="ico"><i data-lucide="layers"></i></span><h3>Widgets de otros orígenes</h3><p>Un iframe con <code>allow="tools"</code> expone tools con <code>exposedTo</code>.</p></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ RECETA ═════════════ -->
+      <section data-id="receta" data-label="Receta en 5 pasos">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Basado en las best practices oficiales de Chrome</p>
+          <h2 class="title">Tu web agéntica en <span class="hl">5 postas</span></h2>
+          <div class="road">
+            <div class="road-line" aria-hidden="true"></div>
+            <div class="road-runner" data-runner="3" aria-hidden="true"></div>
+            <div class="postas reveal">
+              <div class="posta" style="--i: 0"><span class="n">1</span><b>Inventario de intenciones</b><small>¿Qué viene a hacer la gente?</small></div>
+              <div class="posta" style="--i: 1"><span class="n">2</span><b>Una tool por intención</b><small>verbo exacto: reservar_ruta</small></div>
+              <div class="posta" style="--i: 2"><span class="n">3</span><b>Un solo servicio</b><small>UI, tools y tests: la misma lógica</small></div>
+              <div class="posta" style="--i: 3"><span class="n">4</span><b>Marca lo irreversible</b><small>consequentialHint + confirmación</small></div>
+              <div class="posta" style="--i: 4"><span class="n">5</span><b>Mide con evals</b><small>línea base, ideal y checks</small></div>
+            </div>
+          </div>
+          <p class="small muted road-note">Como los chasquis: cada posta entrega el encargo completo a la siguiente.</p>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ DEMO ═════════════ -->
+      <section data-id="demo" data-label="Demo · Ruta Chasqui">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Demo · Ruta Chasqui · precios ficticios</p>
+          <h2 class="title">El mismo encargo, <span class="hl">dos agentes</span></h2>
+          <div class="demo-grid">
+            <div>
+              <p class="prompt-chip"><i data-lucide="message-square-text"></i> “Arma Machu Picchu el día 2 y el Valle Sagrado el día 3 para 2 personas”</p>
+              <ol class="demo-steps reveal">
+                <li style="--i: 0"><span class="dn green">1</span><b>Con WebMCP</b> · llama tools</li>
+                <li style="--i: 1"><span class="dn red">2</span><b>Con clics</b> · lee el DOM y adivina</li>
+                <li style="--i: 2"><span class="dn yellow">3</span><b>Rediseño</b> · ¿quién sigue en pie?</li>
+                <li style="--i: 3"><span class="dn blue">4</span><b>Confiable</b> · errores, reseñas y confirmación</li>
+              </ol>
+            </div>
+            <div class="qr-card">
+              <div data-qr="demo"></div>
+              <strong>Repítela en tu laptop</strong>
+              <span data-demo-url>…</span>
+            </div>
+          </div>
+          <p class="small muted engine-note"><i data-lucide="cpu"></i> Gemini Nano (Prompt API) elige la tool · sin Nano: modo simulado con el mismo recorrido</p>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+      <section data-id="demo-webmcp" data-label="Demo 1 · Con WebMCP" class="clip-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Demo 1 de 4 · agente con WebMCP</p>
+          <h2 class="title">El agente <span class="hl">llama tools</span></h2>
+          <div class="clip-grid">
+            <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/webmcp.webm" poster="/clips/webmcp.png"></video></figure>
+            <div class="clip-side reveal">
+              <div class="stats" style="--i: 0"><div class="stat good"><b>5</b><span>llamadas</span></div><div class="stat good"><b>~1,1 K</b><span>tokens leídos</span></div></div>
+              <ul class="clip-points" style="--i: 1"><li>buscar_experiencias es el <b>formulario declarativo</b></li><li>agregar_a_ruta ×2 con argumentos tipados</li><li>ver_ruta: confirma el <b>estado real</b></li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+      <section data-id="demo-clics" data-label="Demo 2 · Con clics" class="clip-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Demo 2 de 4 · agente de clics</p>
+          <h2 class="title">El mismo encargo <span class="hl">a punta de clics</span></h2>
+          <div class="clip-grid">
+            <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/clics.webm" poster="/clips/clics.png"></video></figure>
+            <div class="clip-side reveal">
+              <div class="stats" style="--i: 0"><div class="stat bad"><b>22</b><span>pasos</span></div><div class="stat bad"><b>~16 K</b><span>tokens leídos</span></div></div>
+              <ul class="clip-points" style="--i: 1"><li>Lee la página completa en <b>cada</b> paso</li><li>Busca botones por su texto y mueve un cursor</li><li>No puede verificar el estado: solo ve la pantalla</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+      <section data-id="demo-redisenio" data-label="Demo 3 · Rediseño" class="clip-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Demo 3 de 4 · rediseñamos la página</p>
+          <h2 class="title">Cambia el diseño: <span class="hl">¿quién sigue en pie?</span></h2>
+          <div class="clip-grid">
+            <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/redisenio.webm" poster="/clips/redisenio.png"></video></figure>
+            <div class="clip-side reveal">
+              <div class="stats" style="--i: 0"><div class="stat bad"><b>✗</b><span>clics: se perdió</span></div><div class="stat good"><b>✓</b><span>WebMCP: igual</span></div></div>
+              <ul class="clip-points" style="--i: 1"><li>Otros textos y el botón dentro de un menú “⋯”</li><li>El agente de clics no encuentra “Agregar”</li><li>Las tools son un <b>contrato</b>: no dependen del diseño</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+      <section data-id="demo-seguridad" data-label="Demo 4 · Confiable" class="clip-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Demo 4 de 4 · andén 3: confiable</p>
+          <h2 class="title">Errores útiles, reseñas <span class="hl">no confiables</span> y confirmación</h2>
+          <div class="clip-grid">
+            <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/seguridad.webm" poster="/clips/seguridad.png"></video></figure>
+            <div class="clip-side reveal">
+              <div class="stats" style="--i: 0"><div class="stat good"><b>↺</b><span>se corrige solo</span></div><div class="stat warn"><b>⚠</b><span>reseña ignorada</span></div></div>
+              <ul class="clip-points" style="--i: 1"><li>“Error: Aclimatación…” → mueve Vinicunca a otro día</li><li><code>untrustedContentHint</code>: la reseña es datos, no órdenes</li><li><code>consequentialHint</code>: la persona confirma la reserva</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ SEGURIDAD ═════════════ -->
+      <section data-id="seguridad" data-label="Seguridad">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Andén 3 · confiable</p>
+          <h2 class="title">El camino de una llamada <span class="hl">segura</span></h2>
+          <div class="guard reveal">
+            <div class="g-step" style="--i: 0"><span class="ico"><i data-lucide="bot"></i></span><b>Agente</b><small>pide reservar_ruta</small></div>
+            <div class="g-step" style="--i: 1"><span class="ico"><i data-lucide="globe"></i></span><b>Navegador</b><small>schema + Permissions Policy <code>tools</code></small></div>
+            <div class="g-step" style="--i: 2"><span class="ico"><i data-lucide="code"></i></span><b>Tu tool</b><small>valida en código + versión del estado</small></div>
+            <div class="g-step warn" style="--i: 3"><span class="ico"><i data-lucide="hand"></i></span><b>consequentialHint</b><small>la persona confirma en pantalla</small></div>
+            <div class="g-step ok" style="--i: 4"><span class="ico"><i data-lucide="check"></i></span><b>Acción</b><small>y la UI muestra el cambio</small></div>
+          </div>
+          <div class="guard-side reveal">
+            <div class="box red" style="--i: 5"><h3 class="ic"><i data-lucide="message-square-warning"></i> untrustedContentHint</h3><p>Reseñas, correos, texto de terceros: son <b>datos</b>, no órdenes.</p></div>
+            <div class="box blue" style="--i: 6"><h3 class="ic"><i data-lucide="layers"></i> Otros orígenes</h3><p>Iframes con <code>allow="tools"</code> y <code>exposedTo</code> solo a quien elijas.</p></div>
+            <div class="box green" style="--i: 7"><h3 class="ic"><i data-lucide="eye"></i> readOnlyHint</h3><p>Lo que solo lee, decláralo: el agente sabe que no cambia nada.</p></div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ PREGUNTA 3 ═════════════ -->
+      <section data-id="q3" data-label="Pregunta 3 · Web agéntica" data-q="q3" class="poll-slide">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Pregunta 3 de 3 · Web agéntica · responde en tu celular</p>
+          <h2 class="title poll-q" data-q-text="q3"></h2>
+          <div class="poll" data-poll="q3"></div>
+          <div class="poll-foot"><span class="pill"><i data-lucide="users"></i> <b data-total>0</b> respuestas</span><p class="explain" data-explain hidden></p><button class="btn-reveal" type="button" data-reveal hidden>Revelar <kbd>V</kbd></button></div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ MURO ═════════════ -->
+      <section data-id="muro" data-label="Muro de chasquis">
+        <div class="frame card-frame wall-frame">
+          <p class="eyebrow">// <span data-count="chasquis">0</span> chasquis en el Qhapaq Ñan</p>
+          <h2 class="title">El muro de <span class="hl">chasquis</span></h2>
+          <div class="encargo-top" data-encargo-top></div>
+          <div class="chasqui-wall" data-chasqui-wall></div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ CHECKLIST ═════════════ -->
+      <section data-id="checklist" data-label="Para llevar">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Para llevar · también en tu memoria y en la skill del repo</p>
+          <h2 class="title">10 reglas para una <span class="hl">web agéntica</span></h2>
+          <ol class="checklist" data-checklist></ol>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ PODIO ═════════════ -->
+      <section data-id="podio" data-label="Podio">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Aciertos + rapidez · +200 por publicar tu chasqui</p>
+          <h2 class="title">El <span class="hl">podio</span></h2>
+          <div class="podium" data-podium></div>
+          <div class="podium-rest" data-rest></div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
+
+      <!-- ═════════════ GRACIAS ═════════════ -->
+      <section data-id="gracias" data-label="Gracias" class="cover thanks">
+        <div class="apus" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="frame cover-frame">
+          <p class="eyebrow">// Sulpayki = gracias en quechua</p>
+          <h1 class="cover-title sm"><span>¡Sulpayki,</span><span><span class="hl">Cusco!</span></span></h1>
+          <div class="thanks-grid">
+            <div class="qr-card sm"><div data-qr="repo"></div><strong>Repo + skill</strong><span>web-mcp-devfest26-cusco</span></div>
+            <div class="qr-card sm"><div data-qr="live"></div><strong>Tu memoria</strong><span>PDF · HTML · tu chasqui</span></div>
+          </div>
+        </div>
+        <div class="cover-chasquis" data-chasquis="3" aria-hidden="true"></div>
+        <div class="awana bottom" aria-hidden="true"></div>
+        <div class="awana-runner" data-runner="4" aria-hidden="true"></div>
+      </section>
+    </deck-stage>
+
+    <div class="reactions" aria-hidden="true"></div>
+    <span class="presenter-badge" hidden>EN VIVO</span>
+    <div class="deck-menu">
+      <button class="deck-menu-btn" type="button" aria-expanded="false" aria-controls="deck-menu-panel" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+      <div class="deck-menu-panel" id="deck-menu-panel" hidden></div>
+    </div>
+
+    <script src="/deck-stage.js"></script>
+    <script type="module" src="/src/deck/main.ts"></script>
+  </body>
+</html>
