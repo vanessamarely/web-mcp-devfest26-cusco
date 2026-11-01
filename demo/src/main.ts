@@ -16,7 +16,7 @@ const params = new URLSearchParams(location.search);
 const speed = Number(params.get('speed')) || 1;
 
 // ── Tema ─────────────────────────────────────────────────────────────
-$('[data-theme]').addEventListener('click', () => {
+$('[data-theme-toggle]').addEventListener('click', () => {
   const dark = document.documentElement.dataset.theme !== 'dark' && !(document.documentElement.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   try {

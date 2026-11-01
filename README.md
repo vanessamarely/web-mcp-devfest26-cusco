@@ -2,6 +2,17 @@
 
 Charla técnica para **DevFest Cusco 2026** (30 min) de [Vanessa Aristizabal](https://github.com/vanessamarely). Qué es MCP, qué es WebMCP y cómo hacer, de verdad, una web agéntica.
 
+## En vivo
+
+| Qué | URL |
+|---|---|
+| Deck (proyector) | https://webmcp-cusco-slides.web.app/?presenter=1 |
+| App de asistentes (QR) | https://webmcp-cusco-slides.web.app/live/ |
+| Consola de la presentadora | https://webmcp-cusco-slides.web.app/presenter/ |
+| Demo Ruta Chasqui | https://webmcp-cusco-demo.web.app |
+
+Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore.rules)). Para que los celulares se sincronicen hay que activar en la consola **Authentication → Anónimo** y, para presentar, **GitHub** (redirect `https://webmcp-cusco.firebaseapp.com/__/auth/handler`).
+
 | Carpeta | Qué es |
 |---|---|
 | [`slides/`](slides) | Deck (32 slides) con proporciones **4:3 · 16:10 · 16:9 · 21:9 · extendida** (tecla **A**/**E**), claro/oscuro (**L**), alto contraste (**H**). Consola en `/presenter/` (**P**). App de asistentes en `/live/`: apodos únicos para 300+ personas (con numeración si se repiten), 3 preguntas por el podio, **crea tu chasqui** (PNG), notas y memoria en **PDF / HTML / Markdown**. |

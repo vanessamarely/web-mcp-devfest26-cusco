@@ -544,8 +544,8 @@ section[data-deck-active] .road-runner { animation: postas 9s ease-in-out 0.6s i
 .posta { display: grid; justify-items: center; text-align: center; gap: 6px; }
 .posta .n { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: var(--lw) solid var(--line); font: 700 22px var(--mono); background: var(--ht-yellow); color: #1e1e1e; }
 .posta:nth-child(2) .n { background: var(--ht-blue); } .posta:nth-child(3) .n { background: var(--ht-green); } .posta:nth-child(4) .n { background: var(--ht-red); } .posta:nth-child(5) .n { background: #c3a6ff; }
-.posta b { font-size: 20px; line-height: 1.15; }
-.posta small { font-size: 16px; color: var(--ink-dim); line-height: 1.25; }
+.posta b { font-size: 22px; line-height: 1.15; }
+.posta small { font-size: 17.5px; color: var(--ink-dim); line-height: 1.25; }
 .road-note { margin: 22px 0 0; font-size: 17px; }
 :root[data-ratio='4-3'] .posta b { font-size: 16px; } :root[data-ratio='4-3'] .posta small { font-size: 13.5px; }
 
@@ -621,18 +621,18 @@ section[data-deck-active] .g-step.warn .ico { animation: pulse 1.6s ease-in-out 
 .demo-steps li { display: flex; align-items: center; gap: 12px; }
 .dn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: var(--lw) solid var(--line); font: 700 18px var(--mono); color: #1e1e1e; flex: none; }
 .dn.green { background: var(--ht-green); } .dn.red { background: var(--ht-red); } .dn.yellow { background: var(--ht-yellow); } .dn.blue { background: var(--ht-blue); }
-.clip-slide .card-frame { padding-top: 22px; padding-bottom: 48px; }
+.clip-slide .card-frame { padding: 18px 26px 44px; }
 .clip-slide .title { font-size: 36px; margin-bottom: 14px; }
-.clip-grid { display: grid; grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr); gap: 18px; align-items: start; min-height: 0; }
-.clip { margin: 0; border: var(--lw) solid var(--line); border-radius: var(--r-md); overflow: hidden; background: #fff; aspect-ratio: 1280 / 760; }
+.clip-grid { display: grid; grid-template-columns: minmax(0, 3.1fr) minmax(0, 1fr); gap: 18px; align-items: start; min-height: 0; }
+.clip { margin: 0; border: var(--lw) solid var(--line); border-radius: var(--r-md); overflow: hidden; background: #fff; aspect-ratio: 1100 / 660; max-height: 500px; }
 .clip video { width: 100%; height: 100%; display: block; object-fit: cover; }
 .clip-side { display: grid; gap: 12px; }
-.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stats { display: grid; grid-template-columns: 1fr; gap: 8px; }
 .stat { display: grid; gap: 2px; padding: 10px 12px; border: var(--lw) solid var(--line); border-radius: var(--r-md); background: var(--surface); }
-.stat b { font: 700 34px var(--mono); line-height: 1; }
+.stat b { font: 700 30px var(--mono); line-height: 1; white-space: nowrap; }
 .stat span { font-size: 15px; color: var(--ink-dim); }
 .stat.good { background: var(--p-green); } .stat.bad { background: var(--p-red); } .stat.warn { background: var(--p-yellow); }
-.clip-points { margin: 0; padding-left: 20px; display: grid; gap: 10px; font-size: 18.5px; line-height: 1.3; }
+.clip-points { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 16.5px; line-height: 1.3; }
 :root[data-ratio='4-3'] .clip-grid { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 12px; }
 :root[data-ratio='4-3'] .clip-points { font-size: 15px; } :root[data-ratio='4-3'] .stat b { font-size: 24px; } :root[data-ratio='4-3'] .stats { grid-template-columns: 1fr; }
 :root[data-ratio='21-9'] .clip-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
@@ -644,3 +644,60 @@ section[data-deck-active] .g-step.warn .ico { animation: pulse 1.6s ease-in-out 
   .road { padding-top: 0; }
   .runner { left: 4%; right: 4%; } .bubble { font-size: 15px; }
 }
+
+/* Ajustes finos para 4:3 */
+.poll .tile .label { min-width: 0; overflow-wrap: anywhere; }
+:root[data-ratio='4-3'] .lane-row .lane-tag { font-size: 12.5px; padding: 4px 8px; }
+:root[data-ratio='4-3'] .poll .tile .label { font-size: 18px; }
+:root[data-ratio='4-3'] .g-step b { font-size: 13.5px; overflow-wrap: normal; word-break: normal; }
+:root[data-ratio='4-3'] .g-step.warn b { font-size: 12px; }
+@media (max-width: 640px) {
+  .section-slide .frame { padding-bottom: 52%; padding-top: 60px; justify-content: flex-start !important; }
+  .section-slide .sec-num { font-size: 52px; } .section-slide .sec-title { font-size: 34px; }
+  .section-art { height: 48%; opacity: 1; }
+  .runner { top: 4%; bottom: auto; gap: 6px; }
+  .runner-art { width: 34%; }
+  .bubble { padding: 8px 10px; }
+}
+
+/* ═════════════ CENTRADO Y CONTRASTE (revisión final) ═════════════ */
+/* Logo GDG centrado en su esquina (vertical y horizontal). */
+.notch { padding: 0; place-items: center; place-content: center; }
+.notch img, .notch svg { width: 124px; display: block; margin: 0 auto; }
+/* Contenido de cada slide: bloque centrado vertical y horizontalmente, con el mismo aire arriba y abajo. */
+.card-frame { padding: 40px 48px; justify-content: center; align-items: center; }
+.card-frame > * { width: 100%; max-width: 1180px; }
+.card-frame > .eyebrow, .card-frame > .title { text-align: center; }
+.card-frame > .poll-q { text-align: center; }
+.card-frame > .three-verbs, .card-frame > .status-row, .card-frame > .encargo-top { justify-content: center; }
+.card-frame > .example { text-align: center; }
+.poll-foot { justify-content: center; padding-right: 0; }
+.engine-note, .road-note { justify-content: center; text-align: center; padding-right: 0; }
+.guard-side { padding-right: 0; }
+.podium-rest { padding-left: 0; padding-right: 0; }
+.wall-frame { justify-content: flex-start; }
+.clip-slide .card-frame { padding: 26px 36px; }
+.bio { justify-content: center; }
+:root[data-ratio='21-9'] .card-frame > * { max-width: 1400px; }
+/* Lo que queda en la esquina inferior derecha nunca pisa el logo: el bloque se centra y deja aire. */
+.card-frame { padding-bottom: 64px; padding-top: 64px; }
+.clip-slide .card-frame { padding-top: 30px; padding-bottom: 54px; }
+
+/* Modo oscuro: contraste AA en todo el texto. */
+:root[data-theme='dark'] { --ink-dim: #d6d6d6; --surface: #2b2c2e; --bg: #18191a; }
+:root[data-theme='dark'] .hl { background: none; box-shadow: inset 0 -0.2em 0 #f9ab00; color: #fff; }
+:root[data-theme='dark'] .meter i { opacity: 0.32; }
+:root[data-theme='dark'] .poll .tile .bar { opacity: 0.28; }
+:root[data-theme='dark'] .code.focusing .ln { opacity: 0.45; }
+:root[data-theme='dark'] .code.focusing .ln.on { background: rgba(255, 212, 39, 0.22); }
+:root[data-theme='dark'] .chg .old { color: #e8e8e8; }
+:root[data-theme='dark'] .explain, :root[data-theme='dark'] .focus-note, :root[data-theme='dark'] .example span { color: #f0f0f0; }
+:root[data-theme='dark'] .web-frame { background: rgba(249, 171, 0, 0.08); }
+:root[data-theme='dark'] .logic { background: #f0f0f0; color: #1e1e1e; }
+:root[data-theme='dark'] .apus i { opacity: 0.25; }
+:root[data-theme='dark'] .terrace .lvl, :root[data-theme='dark'] .dn, :root[data-theme='dark'] .posta .n, :root[data-theme='dark'] .checklist li::before, :root[data-theme='dark'] .recipe li::before { color: #1e1e1e; }
+:root[data-theme='dark'] .section-art .bubble { color: #1e1e1e; }
+:root[data-theme='dark'] .qr-card { color: #1e1e1e; }
+:root[data-theme='dark'] .stat span, :root[data-theme='dark'] .node .d, :root[data-theme='dark'] .box p, :root[data-theme='dark'] .case p, :root[data-theme='dark'] .terrace p { color: #e2e2e2; }
+.footer { right: 236px; }
+.notch { width: 220px; height: 96px; }

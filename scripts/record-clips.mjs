@@ -13,7 +13,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'slides/public/clips');
 const TMP = join(ROOT, '.clips-tmp');
 const DEMO = process.env.DEMO_URL ?? 'http://localhost:5174';
-const SIZE = { width: 1280, height: 760 };
+const SIZE = { width: 1100, height: 660 };
 const PROMPT = 'Arma Machu Picchu el día 2 y el Valle Sagrado el día 3 para 2 personas';
 mkdirSync(OUT, { recursive: true });
 

@@ -1,0 +1,16 @@
+{
+  "projects": {},
+  "targets": {
+    "webmcp-cusco": {
+      "hosting": {
+        "slides": [
+          "webmcp-cusco-slides"
+        ],
+        "demo": [
+          "webmcp-cusco-demo"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

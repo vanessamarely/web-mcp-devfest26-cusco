@@ -123,7 +123,10 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     void send(rt.patchSlide({ index, total: sections.length, id: s.dataset.id ?? '', label: s.dataset.label ?? '', kind: c?.kind ?? 'content', qid }));
     // La primera vez que se muestra una pregunta, se marca la hora de apertura (bono por rapidez).
     if (qid && !slide?.openedAt?.[qid]) void send(rt.openQuestion(qid));
-    if (c?.kind === 'podium') publishPodium();
+    if (c?.kind === 'podium') {
+      publishPodium();
+      renderPodium();
+    }
   }
   stage.addEventListener('slidechange', (e) => publish((e as CustomEvent).detail.index));
   {
@@ -346,7 +349,11 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     if (!box) return;
     // Solo la presentadora tiene las respuestas: el resto ve el podio que ella publica.
     const list = presenter ? ranking() : (slide?.podium ?? []);
-    if (presenter && isPodiumSlide()) schedulePodiumPublish();
+    // Solo se redibuja (y se publica) si el ranking cambió: evita bucles y reinicios de la animación.
+    const sig = JSON.stringify(list.slice(0, 10).map((r) => [r.name, r.score, r.code]));
+    if (sig === podiumSig && box.childElementCount) return;
+    podiumSig = sig;
+    if (presenter && isPodiumSlide() && sig !== publishedSig) schedulePodiumPublish();
     const medal = ['2°', '1°', '3°'];
     const order = [list[1], list[0], list[2]];
     box.innerHTML = order
@@ -360,13 +367,17 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     if (rest) rest.innerHTML = list.slice(3, 10).map((r, i) => `<span class="pill">${i + 4}. ${esc(r.name)} · ${r.score.toLocaleString('es-PE')}</span>`).join('');
   }
   let podiumTimer = 0;
+  let podiumSig = '';
+  let publishedSig = '';
   function schedulePodiumPublish() {
     clearTimeout(podiumTimer);
     podiumTimer = window.setTimeout(publishPodium, 1500);
   }
   function publishPodium() {
     if (!presenter) return;
-    void send(rt.patchSlide({ podium: ranking().slice(0, 10).map(({ name, score, code }) => ({ name, score, code })) }));
+    const top = ranking().slice(0, 10).map(({ name, score, code }) => ({ name, score, code }));
+    publishedSig = JSON.stringify(top.map((r) => [r.name, r.score, r.code]));
+    void send(rt.patchSlide({ podium: top }));
   }
 
   // ── Reacciones flotantes ──────────────────────────────────────────────
