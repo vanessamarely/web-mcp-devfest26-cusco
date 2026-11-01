@@ -171,7 +171,7 @@ export async function keepsakePDF({ nickname, notes, chasqui }: KeepsakeInput): 
   CHECKLIST.forEach(([h, p], i) => w.text(`${i + 1}. ${h}: ${p}`, { size: 10, x: M + 6, width: W - 2 * M - 6 }));
   w.space(10);
   w.text('Enlaces', { font: f.b, size: 12 });
-  for (const l of [`Web de Vanessa: https://vanessamarely.dev`, `Repo: ${REPO_URL}`, `Skill para tu agente: ${SKILL_URL}`, `Slides: ${SLIDES_URL}`, `Demo: ${DEMO_URL}`]) w.text(l, { size: 10 });
+  for (const l of [`Web de Vanessa: https://vanessamarely.dev`, `Repo: ${REPO_URL}`, `Guía WebMCP para tu agente de código: ${SKILL_URL}`, `Slides: ${SLIDES_URL}`, `Demo: ${DEMO_URL}`]) w.text(l, { size: 10 });
 
   // Pie con número de página en todas
   const pages = pdf.getPages();

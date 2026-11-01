@@ -12,8 +12,9 @@ import { downloadFile, keepsakeHTML, keepsakeMarkdown, type SavedNote } from '..
 import { ACCESORIOS, DEFAULT_CHASQUI, ENCARGOS, EXPRESIONES, LEYENDA, PALLAYS, PIELES, PONCHOS, TOCADOS, chasquiPNG, chasquiSilhouette, chasquiSVG, normalizeChasqui, randomChasqui, type ChasquiOptions } from '../shared/chasqui';
 import { claimUniqueName, cleanName, randomName, TOTAL_COMBINATIONS } from '../shared/names';
 import { QUESTIONS, type QuestionId } from '../shared/questions';
-import { REACTIONS, correctCount, getRealtime, winnerCode, type Reaction, type Realtime, type SlideState, type Votes } from '../shared/realtime';
+import { REACTIONS, correctCount, getRealtime, podiumKey, winnerCode, type Reaction, type Realtime, type SlideState, type Votes } from '../shared/realtime';
 import { esc } from '../shared/esc';
+import { isOnTopic } from '../shared/ask';
 
 const ICONS = { Brain, Check, Download, FileText, Flame, GitBranch, Heart, MessageCircleQuestion, NotebookPen, Radio, Send, Shuffle, Sparkles, SunMoon, Trophy, Map: MapIcon, X };
 const REACTION_ICONS: Record<Reaction, IconNode> = { fire: Flame, heart: Heart, mind: Brain, ask: MessageCircleQuestion };
@@ -436,9 +437,11 @@ const MEDALS = ['🥇', '🥈', '🥉'];
 let celebratedPos = -1;
 function renderPodium(screen: HTMLElement) {
   screen.dataset.screen = `live:${shownId}`;
-  const myCode = winnerCode(rt.uid());
+  const myKey = podiumKey(rt.uid());
   const podium = live?.podium ?? [];
-  const pos = podium.findIndex((p) => p.code === myCode);
+  // Cada celular se reconoce por su clave larga (no por el código corto, que podría repetirse).
+  const pos = podium.findIndex((p) => (p.key ? p.key === myKey : p.code === winnerCode(rt.uid())));
+  const myCode = pos >= 0 ? podium[pos].code : winnerCode(rt.uid());
   const onPodium = pos >= 0 && pos < 3;
   const me = pos >= 0 ? podium[pos] : null;
   const myAvatar = chasqui.saved ? chasquiSVG(chasqui.opts, chasqui.name) : me?.opts ? chasquiSVG(me.opts, me.name) : '';
@@ -456,7 +459,7 @@ function renderPodium(screen: HTMLElement) {
           ? `<h1>¡Quedaste en el puesto ${pos + 1}!</h1><p class="muted">Estás en el top 10 con ${me!.score.toLocaleString('es-PE')} puntos. ¡Gran carrera, chasqui!</p>`
           : `<h1>¡Gracias por jugar!</h1><p class="muted">Acertaste ${correctCount(myVotes, live?.answers ?? {})} de 3. El podio está en la pantalla.</p>`
     }
-    ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${p.code === myCode ? 'data-me' : ''}><span class="pl-avatar">${p.opts ? chasquiSVG(p.opts, p.name) : chasquiSilhouette()}</span><span class="pl-name">${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
+    ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${i === pos ? 'data-me' : ''}><span class="pl-avatar">${p.opts ? chasquiSVG(p.opts, p.name) : chasquiSilhouette()}</span><span class="pl-name">${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
     <p class="fine">Tu código: <b>${myCode}</b></p>
   </section>`;
   // Vibra una sola vez cuando entras al podio.
@@ -542,7 +545,8 @@ function renderEnd(screen: HTMLElement) {
     <div class="stats"><span>${SLIDES.filter((s) => s.inSummary).length} ideas clave</span><span>${n} ${n === 1 ? 'nota' : 'notas'}</span><span>${chasqui.saved ? '1 chasqui' : 'sin chasqui'}</span></div>
     ${chasqui.saved ? `<div class="end-doll">${chasquiSVG(chasqui.opts, chasqui.name)}<div><b>${esc(chasqui.name)}</b><span>“${esc(ENCARGOS[chasqui.encargo])}”</span></div></div>` : `<button class="btn wide" type="button" data-go-chasqui>${icon(Sparkles, 18)} Crear mi chasqui para la memoria</button>`}
     ${keepsakeButtons()}
-    <a class="btn wide" href="${SKILL_URL}" target="_blank" rel="noreferrer">${icon(Sparkles, 18)} Skill para tu agente de código</a>
+    <a class="btn wide" href="${SKILL_URL}" target="_blank" rel="noreferrer">${icon(Sparkles, 18)} Guía WebMCP para tu agente de código</a>
+    <p class="fine">Instálala en Claude Code, Gemini CLI o Cursor y pídele: <i>“agrega WebMCP a mi web”</i>. Aplica las 10 reglas de la charla en tu proyecto.</p>
     <a class="btn wide ghost" href="${REPO_URL}" target="_blank" rel="noreferrer">${icon(GitBranch, 18)} Ver el repositorio</a>
   </section>`;
   screen.querySelector('[data-go-chasqui]')?.addEventListener('click', () => go('chasqui'));
@@ -727,14 +731,17 @@ function setupReactions() {
 }
 
 // Preguntas para la presentadora: texto libre, por eso NO se proyecta (solo ella las lee).
+// Solo sobre el tema de la charla: se elige el tema y el texto debe mencionar algo relacionado.
+const ASK_TOPICS = ['MCP', 'WebMCP', 'Web agéntica', 'La demo', 'Seguridad', 'Gemini Nano / IA en el navegador'] as const;
 let lastAsk = 0;
 function openAsk() {
   const dlg = document.createElement('dialog');
   dlg.className = 'ask-sheet';
   dlg.innerHTML = `<form>
-    <h2>${icon(MessageCircleQuestion, 22)} ¿Tienes una pregunta?</h2>
-    <p class="fine">Le llega a Vanessa con tu apodo${name ? ` <b>${esc(name)}</b>` : ''}. No se proyecta: la responde al final.</p>
-    <textarea name="q" rows="4" maxlength="280" required placeholder="Ej.: ¿Puedo usar WebMCP con Angular?"></textarea>
+    <h2>${icon(MessageCircleQuestion, 22)} ¿Tienes una pregunta sobre la charla?</h2>
+    <p class="fine">Solo preguntas sobre <b>MCP, WebMCP y la web agéntica</b>. Le llegan a Vanessa con tu apodo${name ? ` <b>${esc(name)}</b>` : ''}; no se proyectan y las responde al final.</p>
+    <fieldset class="field"><legend>Tema</legend><div class="chips" role="radiogroup" aria-label="Tema">${ASK_TOPICS.map((tp, i) => `<button type="button" role="radio" aria-checked="${i === 1}" data-topic="${esc(tp)}">${esc(tp)}</button>`).join('')}</div></fieldset>
+    <textarea name="q" rows="4" maxlength="280" required placeholder="Ej.: ¿Cómo marco una tool como irreversible en WebMCP?"></textarea>
     <p class="fine" data-ask-msg role="status"></p>
     <div class="row"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary" type="submit">${icon(Send, 18)} Enviar</button></div>
   </form>`;
@@ -744,18 +751,26 @@ function openAsk() {
     dlg.remove();
   };
   dlg.addEventListener('cancel', () => dlg.remove());
+  dlg.querySelectorAll<HTMLButtonElement>('[data-topic]').forEach((b) =>
+    b.addEventListener('click', () => dlg.querySelectorAll('[data-topic]').forEach((x) => x.setAttribute('aria-checked', String(x === b)))),
+  );
   $('[data-cancel]', dlg).addEventListener('click', close);
   dlg.querySelector('form')!.addEventListener('submit', async (e) => {
     e.preventDefault();
     const text = dlg.querySelector('textarea')!.value.trim();
+    const topic = dlg.querySelector<HTMLElement>('[data-topic][aria-checked="true"]')?.dataset.topic ?? 'WebMCP';
     const msg = $('[data-ask-msg]', dlg);
     if (!text) return;
+    if (!isOnTopic(text)) {
+      msg.textContent = 'Tu pregunta no parece ser sobre la charla. Escríbela sobre MCP, WebMCP, agentes, la demo o la seguridad de las tools.';
+      return;
+    }
     if (Date.now() - lastAsk < 15000) return void (msg.textContent = 'Espera unos segundos antes de enviar otra.');
     const sendBtn = dlg.querySelector<HTMLButtonElement>('[type="submit"]')!;
     sendBtn.disabled = true;
     msg.textContent = 'Enviando…';
     try {
-      await rt.ask({ name: name ?? 'Anónimo', text: text.slice(0, 280), slide: (live?.label ?? '').slice(0, 80) });
+      await rt.ask({ name: name ?? 'Anónimo', text: `[${topic}] ${text}`.slice(0, 280), slide: (live?.label ?? '').slice(0, 80) });
       void rt.react('ask').catch(() => undefined);
       lastAsk = Date.now();
       msg.textContent = '¡Enviada! Gracias.';

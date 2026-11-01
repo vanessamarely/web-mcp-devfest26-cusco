@@ -13,7 +13,7 @@ import { SLIDE_BY_ID } from '../shared/content';
 import { NS, PUBLIC_DEMO_URL, PUBLIC_SLIDES_URL, REPO_URL, SESSION_ID, prettyUrl, publicLiveUrl } from '../shared/config';
 import { ENCARGOS, chasquiSilhouette, chasquiSVG, type ChasquiOptions } from '../shared/chasqui';
 import { QUESTIONS, QUESTION_IDS, parseAnswerKey, type AnswerKey, type QuestionId } from '../shared/questions';
-import { REACTIONS, getRealtime, scoreFor, tally, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
+import { REACTIONS, getRealtime, podiumKey, scoreFor, tally, uniqueCodes, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
 import { esc } from '../shared/esc';
 import { createBursts } from './reaction-bursts';
 
@@ -399,7 +399,9 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     const box = document.querySelector<HTMLElement>('[data-podium]');
     if (!box) return;
     // Solo la presentadora tiene las respuestas: el resto ve el podio que ella publica.
-    const list = presenter ? ranking() : (slide?.podium ?? []);
+    const ranked = presenter ? ranking().slice(0, 10) : [];
+    const codes = uniqueCodes(ranked.map((r) => r.uid));
+    const list = presenter ? ranked.map((r, i) => ({ ...r, code: codes[i] })) : (slide?.podium ?? []);
     // Solo se redibuja (y se publica) si el ranking cambió: evita bucles y reinicios de la animación.
     const sig = JSON.stringify(list.slice(0, 10).map((r) => [r.name, r.score, r.code, r.opts ?? null]));
     if (sig === podiumSig && box.childElementCount) return;
@@ -426,7 +428,9 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
   }
   function publishPodium() {
     if (!presenter) return;
-    const top = ranking().slice(0, 10).map(({ name, score, code, opts }) => ({ name, score, code, opts }));
+    const ranked = ranking().slice(0, 10);
+    const codes = uniqueCodes(ranked.map((r) => r.uid));
+    const top = ranked.map(({ uid, name, score, opts }, i) => ({ name, score, code: codes[i], key: podiumKey(uid), opts }));
     publishedSig = JSON.stringify(top.map((r) => [r.name, r.score, r.code, r.opts ?? null]));
     void send(rt.patchSlide({ podium: top }));
   }

@@ -1,4 +1,6 @@
+// @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
+import { podiumKey, uniqueCodes, winnerCode } from './realtime';
 import { TOTAL_COMBINATIONS, allNames, claimUniqueName, nameKey, numbered, randomName } from './names';
 
 describe('apodos', () => {
@@ -33,5 +35,31 @@ describe('apodos', () => {
     expect(got[0]).toBe('Cóndor Veloz');
     expect(got[1]).toBe('Cóndor Veloz 2');
     expect(got[299]).toBe('Cóndor Veloz 300');
+  });
+});
+
+describe('códigos del podio', () => {
+  it('el código es estable y de 4 letras legibles', () => {
+    expect(winnerCode('abc')).toBe(winnerCode('abc'));
+    expect(winnerCode('abc')).toMatch(/^[A-HJ-NP-Z2-9]{4}$/);
+  });
+  it('la clave interna no choca con 3.000 personas', () => {
+    const keys = new Set(Array.from({ length: 3000 }, (_, i) => podiumKey('uid-' + i)));
+    expect(keys.size).toBe(3000);
+  });
+  it('si dos códigos del top coinciden, se alargan hasta ser únicos', () => {
+    // busca dos uid con el mismo código de 4 letras
+    const seen = new Map<string, string>();
+    let pair: [string, string] | null = null;
+    for (let i = 0; i < 200000 && !pair; i++) {
+      const u = 'u' + i;
+      const c = winnerCode(u);
+      if (seen.has(c)) pair = [seen.get(c)!, u];
+      else seen.set(c, u);
+    }
+    expect(pair).not.toBeNull();
+    const codes = uniqueCodes([...pair!, 'otro']);
+    expect(new Set(codes).size).toBe(3);
+    expect(codes[0].length).toBeGreaterThan(4);
   });
 });

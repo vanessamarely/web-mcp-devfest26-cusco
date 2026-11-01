@@ -77,6 +77,26 @@ sections.forEach((s, i) => {
   );
 });
 
+// ── QR pequeño para unirse en cada slide (para quien llega tarde) ─────
+// Esquina inferior izquierda, simétrico al logo de GDG. No va donde ya hay un QR grande.
+// Tecla J: mostrar / ocultar (se recuerda en este navegador).
+const NO_JOIN_QR = new Set(['portada', 'unete', 'demo', 'gracias']);
+sections.forEach((s) => {
+  if (NO_JOIN_QR.has(s.dataset.id ?? '')) return;
+  s.insertAdjacentHTML('beforeend', '<div class="join-notch" aria-hidden="true"><div class="join-qr" data-qr="live"></div><span>Únete</span></div>');
+});
+try {
+  if (localStorage.getItem(`${NS}.deck.joinqr`) === '0') document.documentElement.dataset.joinqr = 'off';
+} catch {
+  /* noop */
+}
+const toggleJoinQr = () => {
+  const off = document.documentElement.dataset.joinqr !== 'off';
+  if (off) document.documentElement.dataset.joinqr = 'off';
+  else delete document.documentElement.dataset.joinqr;
+  save('joinqr', off ? '0' : '1');
+};
+
 // ── Código: una sola fuente (content.ts) para el deck, el celular y la memoria ──
 const CODE: Record<string, string> = { mcp: CODE_MCP, imperative: CODE_IMPERATIVE, declarative: CODE_DECLARATIVE, safe: CODE_SAFE };
 document.querySelectorAll<HTMLElement>('[data-code]').forEach((el) => {
@@ -170,6 +190,7 @@ menu.innerHTML = `
   <button type="button" data-act="contrast">Alto contraste (proyector) <kbd>H</kbd></button>
   <button type="button" data-act="fs">Pantalla completa <kbd>F</kbd></button>
   <button type="button" data-act="rail">Panel de miniaturas <kbd>S</kbd></button>
+  <button type="button" data-act="joinqr">QR para unirse en cada slide <kbd>J</kbd></button>
   <button type="button" data-act="present" data-presenter-only>Presentar en vivo (GitHub)</button>
   <button type="button" data-act="answers" data-presenter-ui hidden>Cargar respuestas del podio… <kbd data-answers-status></kbd></button>
   <button type="button" data-act="questions" data-presenter-ui hidden>Preguntas del público <kbd><span data-q-count>0</span> · Q</kbd></button>
@@ -218,6 +239,7 @@ menu.addEventListener('click', (e) => {
   if (act === 'contrast') toggleContrast();
   if (act === 'fs') toggleFullscreen();
   if (act === 'rail') toggleRail();
+  if (act === 'joinqr') toggleJoinQr();
   if (act === 'present') document.dispatchEvent(new CustomEvent('deck:present'));
   if (act === 'answers') document.dispatchEvent(new CustomEvent('deck:answers'));
   if (act === 'wipe') {
@@ -271,6 +293,7 @@ addEventListener('keydown', (e) => {
   if (k === 'a') ratio.cycle();
   if (k === 'e') ratio.toggleEvent();
   if (k === 'm') (menu.hidden ? openMenu : closeMenu)();
+  if (k === 'j') toggleJoinQr();
   if (k === 'p') open(withSessionParams('/presenter/'), `${NS}-presenter`);
 });
 
@@ -281,14 +304,14 @@ const ratio = initRatio(stage, sections);
 initCodeFocus(stage, sections);
 
 // ── El código siempre cabe: ajusta el tamaño de letra al ancho Y al alto disponibles ──
-// (en 4:3 la columna es más angosta; en 21:9 hay más espacio). Mínimo legible: 12 px.
+// (en 4:3 la columna es más angosta; en 21:9 hay más espacio). Mínimo legible: 11 px.
 function fitCode() {
   document.querySelectorAll<HTMLElement>('.code pre').forEach((pre) => {
     const frame = pre.closest<HTMLElement>('.card-frame');
     let size = 17;
     pre.style.fontSize = `${size}px`;
     const tooBig = () => pre.scrollWidth > pre.clientWidth + 1 || (frame ? frame.scrollHeight > frame.clientHeight + 1 : false);
-    while (size > 12 && tooBig()) pre.style.fontSize = `${(size -= 0.5)}px`;
+    while (size > 11 && tooBig()) pre.style.fontSize = `${(size -= 0.5)}px`;
   });
 }
 let fitRaf = 0;

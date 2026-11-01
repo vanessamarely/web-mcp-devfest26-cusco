@@ -20,7 +20,10 @@ export interface PollResult {
 export interface PodiumEntry {
   name: string;
   score: number;
+  /** Código visible (4+ letras) para reclamar el premio: único dentro del top 10. */
   code: string;
+  /** Clave interna larga para que cada celular reconozca su lugar (no se muestra). */
+  key?: string;
   /** Opciones del chasqui que publicó (pocos bytes); sin chasqui → silueta. */
   opts?: ChasquiOptions | null;
 }
@@ -183,12 +186,32 @@ export function scoreFor(vote: VoteRecord | undefined, openedAt: SlideState['ope
 /** Aciertos según las respuestas ya reveladas. */
 export const correctCount = (votes: Votes, answers: AnswerKey) => (Object.keys(votes) as QuestionId[]).filter((q) => answers[q] && votes[q] === answers[q]!.correct).length;
 
-/** Código corto y estable por persona (para reclamar el premio en el escenario). */
-export function winnerCode(uid: string): string {
-  let h = 2166136261;
-  for (const c of uid) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
-  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sin 0/O ni 1/I: fáciles de leer en voz alta
+
+/** Código estable por persona derivado de su uid (FNV-1a con dos semillas → hasta 12 letras). */
+export function winnerCode(uid: string, length = 4): string {
+  const hash = (seed: number) => {
+    let h = seed >>> 0;
+    for (const c of uid) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+    return h;
+  };
+  const words = [hash(2166136261), hash(0x9e3779b9), hash(0x85ebca6b)];
   let out = '';
-  for (let i = 0; i < 4; i++) out += alphabet[(h >>> (i * 5)) & 31];
+  for (let i = 0; i < length; i++) out += ALPHABET[(words[Math.floor(i / 6)] >>> ((i % 6) * 5)) & 31];
   return out;
+}
+
+/** Clave interna (12 letras ≈ 60 bits): con 300 personas la probabilidad de choque es despreciable. */
+export const podiumKey = (uid: string) => winnerCode(uid, 12);
+
+/**
+ * Códigos visibles únicos dentro del top: si dos coinciden, se alargan (4 → 5 → 6 letras)
+ * hasta que todos son distintos.
+ */
+export function uniqueCodes(uids: string[]): string[] {
+  for (let len = 4; len <= 12; len++) {
+    const codes = uids.map((u) => winnerCode(u, len));
+    if (new Set(codes).size === codes.length) return codes;
+  }
+  return uids.map((u) => winnerCode(u, 12));
 }

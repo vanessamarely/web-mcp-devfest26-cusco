@@ -43,7 +43,7 @@ export function keepsakeMarkdown({ nickname, notes, chasqui }: KeepsakeInput): s
   }
   out.push('', '## 10 reglas para una web agéntica');
   CHECKLIST.forEach(([h, p], i) => out.push(`${i + 1}. **${h}:** ${p}`));
-  out.push('', '---', `- Web de Vanessa: https://vanessamarely.dev`, `- Repo: ${REPO_URL}`, `- Skill para tu agente de código: ${SKILL_URL}`, `- Slides: ${SLIDES_URL}`, `- Demo: ${DEMO_URL}`, '');
+  out.push('', '---', `- Web de Vanessa: https://vanessamarely.dev`, `- Repo: ${REPO_URL}`, `- Guía WebMCP para tu agente de código (pídele a Claude Code, Gemini CLI o Cursor que agregue WebMCP a tu web): ${SKILL_URL}`, `- Slides: ${SLIDES_URL}`, `- Demo: ${DEMO_URL}`, '');
   return out.join('\n');
 }
 
@@ -141,7 +141,7 @@ export function keepsakeHTML({ nickname, notes, chasqui }: KeepsakeInput): strin
   </section>
   <section class="card">
     <p class="eyebrow">// Enlaces</p>
-    <p style="margin:0">Web de Vanessa: <a href="https://vanessamarely.dev">vanessamarely.dev</a><br>Repo: <a href="${esc(REPO_URL)}">${esc(REPO_URL)}</a><br>Skill para tu agente: <a href="${esc(SKILL_URL)}">${esc(SKILL_URL)}</a><br>Slides: <a href="${esc(SLIDES_URL)}">${esc(SLIDES_URL)}</a><br>Demo: <a href="${esc(DEMO_URL)}">${esc(DEMO_URL)}</a></p>
+    <p style="margin:0">Web de Vanessa: <a href="https://vanessamarely.dev">vanessamarely.dev</a><br>Repo: <a href="${esc(REPO_URL)}">${esc(REPO_URL)}</a><br>Guía WebMCP para tu agente de código (pídele “agrega WebMCP a mi web”): <a href="${esc(SKILL_URL)}">${esc(SKILL_URL)}</a><br>Slides: <a href="${esc(SLIDES_URL)}">${esc(SLIDES_URL)}</a><br>Demo: <a href="${esc(DEMO_URL)}">${esc(DEMO_URL)}</a></p>
   </section>
   <footer>Generada en tu celular · tus notas nunca salieron de tu dispositivo</footer>
 </main>
