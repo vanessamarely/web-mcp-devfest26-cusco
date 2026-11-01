@@ -431,24 +431,39 @@ function updatePoll(screen: HTMLElement) {
   if (chip) chip.textContent = `${correctCount(myVotes, live?.answers ?? {})} aciertos`;
 }
 
+const PLACES = ['Primer lugar', 'Segundo lugar', 'Tercer lugar'];
+const MEDALS = ['🥇', '🥈', '🥉'];
+let celebratedPos = -1;
 function renderPodium(screen: HTMLElement) {
   screen.dataset.screen = `live:${shownId}`;
   const myCode = winnerCode(rt.uid());
   const podium = live?.podium ?? [];
   const pos = podium.findIndex((p) => p.code === myCode);
-  const winner = pos === 0;
-  screen.innerHTML = `<section class="card-sheet podium-card ${winner ? 'winner' : ''}">
+  const onPodium = pos >= 0 && pos < 3;
+  const me = pos >= 0 ? podium[pos] : null;
+  const myAvatar = chasqui.saved ? chasquiSVG(chasqui.opts, chasqui.name) : me?.opts ? chasquiSVG(me.opts, me.name) : '';
+  screen.innerHTML = `<section class="card-sheet podium-card ${onPodium ? `winner place-${pos + 1}` : ''}">
+    ${onPodium ? '<div class="confetti" aria-hidden="true">' + Array.from({ length: 18 }, (_, i) => `<i style="--i:${i}"></i>`).join('') + '</div>' : ''}
     <p class="kicker">${icon(Trophy, 16)} Podio</p>
     ${
-      winner
-        ? `${chasqui.saved ? `<div class="winner-avatar">${chasquiSVG(chasqui.opts, chasqui.name)}</div>` : ''}<h1>¡Ganaste, ${esc(name)}!</h1><p>Acércate al escenario y muestra este código:</p><p class="code">${myCode}</p>`
-        : pos > 0
-          ? `<h1>Quedaste en el puesto ${pos + 1}</h1><p class="muted">${podium[pos].score.toLocaleString('es-PE')} puntos. ¡Gran carrera, chasqui!</p>`
+      onPodium
+        ? `<p class="medal-big" aria-hidden="true">${MEDALS[pos]}</p>
+           <h1>¡Entraste al podio, ${esc(name)}!</h1>
+           <p class="place-chip">${PLACES[pos]} · ${me!.score.toLocaleString('es-PE')} puntos</p>
+           ${myAvatar ? `<div class="winner-avatar">${myAvatar}</div>` : ''}
+           <p>Acércate al escenario y muestra este código:</p><p class="code">${myCode}</p>`
+        : pos >= 3
+          ? `<h1>¡Quedaste en el puesto ${pos + 1}!</h1><p class="muted">Estás en el top 10 con ${me!.score.toLocaleString('es-PE')} puntos. ¡Gran carrera, chasqui!</p>`
           : `<h1>¡Gracias por jugar!</h1><p class="muted">Acertaste ${correctCount(myVotes, live?.answers ?? {})} de 3. El podio está en la pantalla.</p>`
     }
     ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${p.code === myCode ? 'data-me' : ''}><span class="pl-avatar">${p.opts ? chasquiSVG(p.opts, p.name) : chasquiSilhouette()}</span><span class="pl-name">${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
     <p class="fine">Tu código: <b>${myCode}</b></p>
   </section>`;
+  // Vibra una sola vez cuando entras al podio.
+  if (onPodium && celebratedPos !== pos) {
+    celebratedPos = pos;
+    navigator.vibrate?.([120, 60, 120, 60, 240]);
+  }
 }
 
 function renderWallCta(screen: HTMLElement) {

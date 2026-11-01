@@ -268,3 +268,17 @@ main { max-width: 520px; margin: 0 auto; min-height: 60dvh; }
 .winner-avatar { width: 120px; margin: 0 auto; }
 .winner-avatar svg { width: 100%; height: auto; display: block; animation: bob 1.2s ease-in-out infinite; }
 @keyframes bob { 50% { transform: translateY(-8px); } }
+
+/* Entraste al podio */
+.podium-card { position: relative; overflow: hidden; }
+.podium-card.place-1 { background: #ffe7a5; } .podium-card.place-2 { background: #e8eaed; } .podium-card.place-3 { background: #f6d2b8; }
+:root[data-theme='dark'] .podium-card.place-1, :root[data-theme='dark'] .podium-card.place-2, :root[data-theme='dark'] .podium-card.place-3 { color: #1e1e1e; }
+:root[data-theme='dark'] .podium-card.winner .podium-list li { background: rgba(255, 255, 255, 0.7); }
+.medal-big { margin: 0; font-size: 64px; line-height: 1; animation: medal-in 900ms cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+@keyframes medal-in { from { transform: scale(0.2) rotate(-40deg); opacity: 0; } }
+.place-chip { margin: 0; padding: 6px 16px; border-radius: 999px; border: 2px solid #1e1e1e; background: #fff; color: #1e1e1e; font-weight: 700; font-size: 17px; }
+.confetti { position: absolute; inset: 0; pointer-events: none; }
+.confetti i { position: absolute; top: -12px; left: calc(var(--i) * 5.5%); width: 8px; height: 14px; border-radius: 2px; background: var(--blue); animation: fall 2.6s ease-in calc(var(--i) * 90ms) 2 both; }
+.confetti i:nth-child(4n + 2) { background: var(--red); } .confetti i:nth-child(4n + 3) { background: var(--yellow); } .confetti i:nth-child(4n) { background: var(--green); }
+@keyframes fall { to { transform: translateY(560px) rotate(540deg); opacity: 0.2; } }
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
