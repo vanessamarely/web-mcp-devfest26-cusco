@@ -7,3 +7,4 @@ dist
 .DS_Store
 slides/answers.json
 .clips-tmp
+docs/SPEECH.md
