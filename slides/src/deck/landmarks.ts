@@ -141,3 +141,7 @@ export function coverSky(): string {
 }
 
 export const LANDMARKS: Record<string, () => string> = { machu: machuPicchu, piedra: piedraInca, vinicunca, cover: coverSky };
+
+/** Piezas sueltas para los efectos de reacciones (SVG independientes). */
+export const condorSVG = () => `<svg viewBox="-110 -30 220 60" aria-hidden="true">${condor(0, 0, 1)}</svg>`;
+export const intiSVG = () => `<svg viewBox="-110 -110 220 220" aria-hidden="true">${inti(0, 0, 62, true)}</svg>`;

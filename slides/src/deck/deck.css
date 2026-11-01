@@ -745,3 +745,18 @@ section[data-deck-active] .lm-condor { animation: glide 9s ease-in-out infinite;
 :root[data-ratio='4-3'] .thanks-grid { grid-template-columns: repeat(2, 190px); }
 :root[data-ratio='4-3'] .thanks-grid .qr-card { width: 190px; }
 :root[data-ratio='4-3'] .thanks-grid .qr-card > div:first-child { width: 146px; }
+
+/* ═════════════ REACCIONES CON EFECTO (sobre el deck) ═════════════ */
+.burst { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.burst-sign { position: absolute; left: 50%; top: 14%; transform: translateX(-50%); margin: 0; padding: 12px 22px; border: 3px solid #1e1e1e; border-radius: 999px; background: #ffd427; color: #1e1e1e; font: 700 clamp(18px, 3vw, 34px) var(--sans); white-space: nowrap; animation: sign-pop 5.2s ease both; }
+@keyframes sign-pop { 0% { opacity: 0; transform: translateX(-50%) scale(0.4); } 10%, 85% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(0.9); } }
+.burst-runner { position: absolute; bottom: 4%; left: -20vw; width: 16vw; max-width: 220px; animation: burst-run 5s linear both; }
+.burst-runner svg { width: 100%; height: auto; animation: bob 0.35s ease-in-out infinite; }
+@keyframes burst-run { to { left: 105vw; } }
+.burst-condor { position: absolute; top: 28%; left: -30vw; width: 26vw; max-width: 380px; animation: burst-fly 5s ease-in-out both; }
+.burst-condor svg { width: 100%; height: auto; }
+@keyframes burst-fly { 0% { left: -30vw; transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-6vh) rotate(4deg); } 100% { left: 110vw; transform: translateY(2vh) rotate(-2deg); } }
+.burst-inti { position: absolute; left: 50%; top: 50%; width: 30vh; transform: translate(-50%, -50%); animation: inti-pop 5s ease both; }
+.burst-inti svg { width: 100%; height: auto; }
+@keyframes inti-pop { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.3) rotate(-30deg); } 15%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); } 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .burst-runner, .burst-condor, .burst-inti, .burst-sign { animation: none !important; left: 50%; transform: translateX(-50%); } .burst-runner, .burst-condor { display: none; } }

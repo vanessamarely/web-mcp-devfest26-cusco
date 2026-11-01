@@ -15,6 +15,7 @@ import { ENCARGOS, chasquiSVG } from '../shared/chasqui';
 import { QUESTIONS, QUESTION_IDS, parseAnswerKey, type AnswerKey, type QuestionId } from '../shared/questions';
 import { REACTIONS, getRealtime, scoreFor, tally, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
 import { esc } from '../shared/esc';
+import { createBursts } from './reaction-bursts';
 
 type DeckStage = HTMLElement & { goTo(i: number): void; next(): void; prev(): void };
 
@@ -387,7 +388,11 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
   // ── Reacciones flotantes ──────────────────────────────────────────────
   const layer = document.querySelector<HTMLElement>('.reactions')!;
   let floating = 0;
+  // Oleadas de reacciones → efectos en pantalla (chasqui, cóndor, Inti).
+  const bursts = createBursts(() => players.length);
+  Object.assign(window, { deckBurst: (k: Reaction) => bursts.show(k) });
   rt.onReaction((r) => {
+    bursts.add(r);
     if (floating > 24 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const meta = REACTIONS[r];
     if (!meta) return;
