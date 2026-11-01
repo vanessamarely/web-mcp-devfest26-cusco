@@ -760,3 +760,21 @@ section[data-deck-active] .lm-condor { animation: glide 9s ease-in-out infinite;
 .burst-inti svg { width: 100%; height: auto; }
 @keyframes inti-pop { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.3) rotate(-30deg); } 15%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); } 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.15); } }
 @media (prefers-reduced-motion: reduce) { .burst-runner, .burst-condor, .burst-inti, .burst-sign { animation: none !important; left: 50%; transform: translateX(-50%); } .burst-runner, .burst-condor { display: none; } }
+
+/* ═════════════ MURO CON SALA LLENA ═════════════ */
+.wall-stage { flex: 1; min-height: 0; display: flex; gap: 14px; width: 100%; }
+.wall-stage .chasqui-wall { flex: 1; min-width: 0; padding-bottom: 8px; }
+.spotlight { flex: none; width: 230px; display: grid; justify-items: center; align-content: center; gap: 6px; padding: 12px; border: var(--lw) solid var(--line); border-radius: var(--r-md); background: var(--p-yellow); text-align: center; animation: rise 400ms ease-out both; }
+.spotlight[hidden] { display: none; }
+.spot-art { width: 120px; }
+.spot-art svg { width: 100%; height: auto; display: block; animation: bob 1.2s ease-in-out infinite; }
+.spotlight b { font-size: 20px; line-height: 1.15; overflow-wrap: anywhere; }
+.spotlight small { font-size: 15px; color: var(--ink-dim); line-height: 1.25; }
+.chasqui-wall.mosaic { overflow: hidden; grid-template-columns: repeat(auto-fill, var(--tile, 40px)); gap: 6px; justify-content: center; align-content: center; padding: 0; }
+.chasqui-wall.mosaic .chasqui-tile { padding: 0; border: 0; background: none; animation: none; }
+.chasqui-wall.mosaic .chasqui-tile svg { width: 100%; }
+.chasqui-wall.mosaic .chasqui-tile b, .chasqui-wall.mosaic .chasqui-tile small { display: none; }
+.chasqui-wall.mosaic .chasqui-tile.lit { outline: 3px solid var(--yellow); outline-offset: 2px; border-radius: 6px; transform: scale(1.25); z-index: 1; transition: transform 300ms; }
+:root[data-ratio='4-3'] .spotlight { width: 180px; } :root[data-ratio='4-3'] .spot-art { width: 90px; }
+/* Podio: código del ganador en una píldora legible */
+.podium .code-chip { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border-radius: var(--pill); background: var(--ink); color: var(--bg); font: 600 17px/1 var(--mono); letter-spacing: 0.12em; }

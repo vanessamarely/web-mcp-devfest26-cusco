@@ -321,6 +321,7 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
       }
       if (wall.children[i] !== t.el) wall.insertBefore(t.el, wall.children[i] ?? null);
     });
+    layoutWall(visible.length);
     if (top) {
       const counts = new Map<number, number>();
       visible.filter((d) => !d.hidden).forEach((d) => counts.set(d.encargo, (counts.get(d.encargo) ?? 0) + 1));
@@ -332,6 +333,49 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     }
     dispatchEvent(new Event('tweakchange'));
   });
+
+  // ── Muro con sala llena: mosaico que cabe completo + chasqui destacado que rota ──
+  // Hasta 9 chasquis (una fila): tarjetas grandes con nombre y encargo. Con más, todos se ajustan al
+  // espacio disponible (sin scroll) y uno grande va rotando para que cada persona se vea.
+  const spotlight = document.querySelector<HTMLElement>('[data-spotlight]');
+  const MOSAIC_FROM = 9;
+  let spotTimer = 0;
+  let spotIndex = 0;
+  function fitTiles(n: number) {
+    if (!wall) return;
+    const W = wall.clientWidth;
+    const H = wall.clientHeight;
+    const gap = 6;
+    for (let w = 110; w >= 14; w -= 2) {
+      const cols = Math.max(1, Math.floor((W + gap) / (w + gap)));
+      const rows = Math.ceil(n / cols);
+      if (rows * (w / 0.7 + gap) <= H) return wall.style.setProperty('--tile', `${w}px`);
+    }
+    wall.style.setProperty('--tile', '14px');
+  }
+  function showSpot() {
+    if (!spotlight || !wall) return;
+    const visible = chasquis.filter((c) => !c.hidden);
+    if (!visible.length) return;
+    const d = visible[spotIndex++ % visible.length];
+    spotlight.innerHTML = `<div class="spot-art">${chasquiSVG(d.opts, `Chasqui de ${d.name}`)}</div><b>${esc(d.name)}</b><small>“${esc(ENCARGOS[d.encargo] ?? '')}”</small>`;
+    wall.querySelectorAll('.chasqui-tile.lit').forEach((el) => el.classList.remove('lit'));
+    tiles.get(d.id)?.el.classList.add('lit');
+  }
+  function layoutWall(n: number) {
+    if (!wall) return;
+    const mosaic = n > MOSAIC_FROM;
+    wall.classList.toggle('mosaic', mosaic);
+    if (spotlight) spotlight.hidden = !mosaic;
+    // Esperar al layout (el spotlight cambia el ancho disponible) antes de medir.
+    requestAnimationFrame(() => (mosaic ? fitTiles(n) : wall.style.removeProperty('--tile')));
+    clearInterval(spotTimer);
+    if (mosaic) {
+      showSpot();
+      spotTimer = window.setInterval(showSpot, 2600);
+    }
+  }
+  addEventListener('resize', () => wall?.classList.contains('mosaic') && fitTiles(wall.childElementCount));
 
   // ── Podio ──────────────────────────────────────────────────────────
   function ranking() {
