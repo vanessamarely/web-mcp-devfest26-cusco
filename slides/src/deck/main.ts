@@ -36,7 +36,7 @@ import {
   createIcons,
 } from 'lucide';
 import { CHECKLIST, CODE_DECLARATIVE, CODE_IMPERATIVE, CODE_MCP, CODE_SAFE, SLIDE_BY_ID } from '../shared/content';
-import { DEMO_URL, NS, REPO_URL, prettyUrl, publicLiveUrl, withSessionParams } from '../shared/config';
+import { DEMO_URL, NS, PUBLIC_DEMO_URL, REPO_URL, prettyUrl, publicLiveUrl, withSessionParams } from '../shared/config';
 import { chasquiSVG, type ChasquiOptions } from '../shared/chasqui';
 import { QUESTIONS, type QuestionId } from '../shared/questions';
 import { esc } from '../shared/esc';
@@ -115,7 +115,8 @@ if (checklist) checklist.innerHTML = CHECKLIST.map(([h, p]) => `<li><span><b>${e
 
 // ── Enlaces a la demo ────────────────────────────────────────────────
 document.querySelectorAll<HTMLAnchorElement>('[data-demo-link]').forEach((a) => (a.href = new URL(a.dataset.demoLink!, DEMO_URL).toString()));
-document.querySelectorAll('[data-demo-url]').forEach((el) => (el.textContent = prettyUrl(DEMO_URL)));
+// El QR y el texto de la demo apuntan SIEMPRE a la versión publicada (los asistentes no pueden abrir localhost).
+document.querySelectorAll('[data-demo-url]').forEach((el) => (el.textContent = prettyUrl(PUBLIC_DEMO_URL)));
 
 // ── Tema (claro / oscuro) y alto contraste ───────────────────────────
 const isDark = () => document.documentElement.dataset.theme === 'dark';

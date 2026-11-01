@@ -10,7 +10,7 @@
 import QRCode from 'qrcode';
 import { Brain, Check, Circle, Diamond, Flame, Heart, MessageCircleQuestion, Square, Triangle, createElement, type IconNode } from 'lucide';
 import { SLIDE_BY_ID } from '../shared/content';
-import { DEMO_URL, NS, PUBLIC_SLIDES_URL, REPO_URL, SESSION_ID, prettyUrl, publicLiveUrl } from '../shared/config';
+import { NS, PUBLIC_DEMO_URL, PUBLIC_SLIDES_URL, REPO_URL, SESSION_ID, prettyUrl, publicLiveUrl } from '../shared/config';
 import { ENCARGOS, chasquiSVG } from '../shared/chasqui';
 import { QUESTIONS, QUESTION_IDS, parseAnswerKey, type AnswerKey, type QuestionId } from '../shared/questions';
 import { REACTIONS, getRealtime, scoreFor, tally, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
@@ -45,7 +45,7 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
   const qr = (text: string) => QRCode.toString(text, { type: 'svg', margin: 1, errorCorrectionLevel: 'M', color: { dark: '#1e1e1e', light: '#ffffff' } });
   // Slides publicados SIN modo presentadora (nunca localhost ni ?presenter): para volver a ver la charla.
   const slidesUrl = PUBLIC_SLIDES_URL.replace(/\/$/, '') + '/';
-  const [qrLive, qrRepo, qrDemo, qrSlides] = await Promise.all([qr(liveUrl), qr(REPO_URL), qr(new URL('/', DEMO_URL).toString()), qr(slidesUrl)]);
+  const [qrLive, qrRepo, qrDemo, qrSlides] = await Promise.all([qr(liveUrl), qr(REPO_URL), qr(new URL('/', PUBLIC_DEMO_URL).toString()), qr(slidesUrl)]);
   document.querySelectorAll('[data-qr="live"]').forEach((el) => (el.innerHTML = qrLive));
   document.querySelectorAll('[data-qr="repo"]').forEach((el) => (el.innerHTML = qrRepo));
   document.querySelectorAll('[data-qr="demo"]').forEach((el) => (el.innerHTML = qrDemo));

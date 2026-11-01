@@ -7,7 +7,7 @@
 //  · Chasqui y memoria se generan EN EL DISPOSITIVO: tus notas nunca salen del teléfono.
 import { Brain, Check, Circle, Diamond, Download, FileText, Flame, GitBranch, Heart, MessageCircleQuestion, Moon, NotebookPen, Radio, Send, Shuffle, Sparkles, Square, Sun, SunMoon, Triangle, Trophy, Map as MapIcon, X, createElement, createIcons, type IconNode } from 'lucide';
 import { SLIDES, SLIDE_BY_ID, type SlideContent } from '../shared/content';
-import { DEMO_URL, EVENT, NS, REPO_URL, SKILL_URL, TALK_TITLE } from '../shared/config';
+import { EVENT, NS, PUBLIC_DEMO_URL, REPO_URL, SKILL_URL, TALK_TITLE } from "../shared/config";
 import { downloadFile, keepsakeHTML, keepsakeMarkdown, type SavedNote } from '../shared/keepsake';
 import { ACCESORIOS, DEFAULT_CHASQUI, ENCARGOS, EXPRESIONES, LEYENDA, PALLAYS, PIELES, PONCHOS, TOCADOS, chasquiPNG, chasquiSVG, normalizeChasqui, randomChasqui, type ChasquiOptions } from '../shared/chasqui';
 import { claimUniqueName, cleanName, randomName, TOTAL_COMBINATIONS } from '../shared/names';
@@ -278,7 +278,7 @@ function renderMirror(screen: HTMLElement, c: SlideContent) {
   </section>
   <section class="card-sheet">
     ${noteBoxHTML(c.id, 'Mi nota sobre este slide')}
-    ${c.kind === 'demo' ? `<a class="btn wide primary" href="${DEMO_URL}" target="_blank" rel="noreferrer">${icon(MapIcon, 18)} Abrir Ruta Chasqui (mejor en laptop con Chrome)</a>` : ''}
+    ${c.kind === 'demo' ? `<a class="btn wide primary" href="${PUBLIC_DEMO_URL}" target="_blank" rel="noreferrer">${icon(MapIcon, 18)} Abrir Ruta Chasqui (mejor en laptop con Chrome)</a>` : ''}
     <p class="muted small">Mientras escribes, tu pantalla <b>se queda en este slide</b>. Al guardar vuelves al en vivo.</p>
   </section>`;
   bindNoteBox(screen, c.id, { followLiveOnSave: true });
