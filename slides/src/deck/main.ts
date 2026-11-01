@@ -45,6 +45,7 @@ import { initLive } from './live';
 import { MODES, RATIOS, initRatio, type RatioMode } from './ratio';
 import { initCodeFocus } from './code-focus';
 import { highlight } from './highlight';
+import { LANDMARKS } from './landmarks';
 
 type DeckStage = HTMLElement & { goTo(i: number): void; next(): void; prev(): void };
 
@@ -97,6 +98,10 @@ const DECOR: ChasquiOptions[] = [
   { poncho: 4, pallay: 4, tocado: 4, piel: 0, accesorio: 4, expresion: 3 },
   { poncho: 5, pallay: 1, tocado: 5, piel: 2, accesorio: 6, expresion: 1 },
 ];
+// Paisajes de Cusco detrás de los chasquis (capítulos, portada y cierre).
+document.querySelectorAll<HTMLElement>('[data-landmark]').forEach((el) => {
+  el.innerHTML = LANDMARKS[el.dataset.landmark!]?.() ?? '';
+});
 // Chasquis que corren por el Qhapaq Ñan en cada capítulo, en la receta y sobre el tejido.
 document.querySelectorAll<HTMLElement>('[data-runner]').forEach((el) => {
   el.innerHTML = chasquiSVG(DECOR[Number(el.dataset.runner) % DECOR.length], 'Chasqui');

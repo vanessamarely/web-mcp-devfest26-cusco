@@ -688,8 +688,8 @@ section[data-deck-active] .g-step.warn .ico { animation: pulse 1.6s ease-in-out 
 :root[data-theme='dark'] .hl { background: none; box-shadow: inset 0 -0.2em 0 #f9ab00; color: #fff; }
 :root[data-theme='dark'] .meter i { opacity: 0.32; }
 :root[data-theme='dark'] .poll .tile .bar { opacity: 0.28; }
-:root[data-theme='dark'] .code.focusing .ln { opacity: 0.45; }
-:root[data-theme='dark'] .code.focusing .ln.on { background: rgba(255, 212, 39, 0.22); }
+:root[data-theme='dark'] .code.focusing .ln:not(.on) { opacity: 0.62; }
+:root[data-theme='dark'] .code.focusing .ln.on { opacity: 1; background: rgba(255, 212, 39, 0.14); box-shadow: inset 3px 0 0 #ffd427; }
 :root[data-theme='dark'] .chg .old { color: #e8e8e8; }
 :root[data-theme='dark'] .explain, :root[data-theme='dark'] .focus-note, :root[data-theme='dark'] .example span { color: #f0f0f0; }
 :root[data-theme='dark'] .web-frame { background: rgba(249, 171, 0, 0.08); }
@@ -701,3 +701,38 @@ section[data-deck-active] .g-step.warn .ico { animation: pulse 1.6s ease-in-out 
 :root[data-theme='dark'] .stat span, :root[data-theme='dark'] .node .d, :root[data-theme='dark'] .box p, :root[data-theme='dark'] .case p, :root[data-theme='dark'] .terrace p { color: #e2e2e2; }
 .footer { right: 236px; }
 .notch { width: 220px; height: 96px; }
+
+/* Modo oscuro: sintaxis más luminosa (≥ 4.5:1 incluso en líneas atenuadas) */
+:root[data-theme='dark'] { --code-bg: #17181a; --tok-k: #ffb3d1; --tok-f: #a8e1ff; --tok-s: #9ef0a8; --tok-c: #b9b9b9; --tok-n: #ffe27a; --tok-p: #d9c8ff; }
+:root[data-theme='dark'] .code .bar { color: #d6d6d6; }
+/* Modo foco del código: las líneas atenuadas siguen siendo legibles (≥ 4.5:1) en ambos temas. */
+.code.focusing .ln:not(.on) { opacity: 0.72; }
+.code.focusing .ln.on { opacity: 1; box-shadow: inset 3px 0 0 var(--yellow); }
+:root[data-theme='dark'] .code.focusing .ln:not(.on) { opacity: 0.7; }
+:root[data-theme='dark'] { --tok-c: #cfcfcf; }
+:root:not([data-theme='dark']) { --tok-c: #5f6368; --tok-n: #8a4b00; }
+:root:not([data-theme='dark']) { --tok-k: #7a0049; --tok-s: #0b4f20; --tok-f: #0a3d91; --tok-p: #5a189a; --tok-c: #3c4043; --tok-n: #5c3200; }
+
+/* ═════════════ PAISAJES DE CUSCO ═════════════ */
+.section-art { background: #c3ecf6 !important; }
+.landmark, .cover-landmark { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.landmark-svg { width: 100%; height: 100%; display: block; }
+.section-art .qhapaq { z-index: 1; bottom: 12%; }
+.section-art .runner { z-index: 2; bottom: 6%; }
+.section-art .runner-art { width: 46%; max-width: 190px; }
+.section-art .bubble { box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18); }
+/* Portada y cierre: el cielo de Cusco vive en la región de los personajes, detrás de ellos. */
+.cover-landmark { left: auto; width: var(--cover-art, 40%); z-index: 0; }
+.cover .apus { z-index: 0; }
+.cover-chasquis { z-index: 2; }
+:root[data-theme='dark'] .landmark-svg, :root[data-theme='dark'] .cover-landmark { filter: brightness(0.86) saturate(0.95); }
+/* Movimiento: rayos del Inti girando, nubes y cóndor planeando */
+.lm-rays { transform-box: fill-box; transform-origin: center; }
+section[data-deck-active] .lm-rays { animation: inti-spin 40s linear infinite; }
+section[data-deck-active] .lm-cloud { animation: drift 14s ease-in-out infinite alternate; }
+section[data-deck-active] .lm-condor { animation: glide 9s ease-in-out infinite; }
+@keyframes inti-spin { to { transform: rotate(360deg); } }
+@keyframes drift { to { translate: 26px 0; } }
+@keyframes glide { 0%, 100% { translate: 0 0; rotate: 0deg; } 25% { translate: 60px -14px; rotate: 4deg; } 50% { translate: 120px 0; rotate: 0deg; } 75% { translate: 60px 12px; rotate: -4deg; } }
+@media (prefers-reduced-motion: reduce) { .lm-rays, .lm-cloud, .lm-condor { animation: none !important; } }
+@media (max-width: 640px) { .cover-landmark { width: 100%; top: auto; height: 45%; } .section-art .runner-art { width: 30%; } }
