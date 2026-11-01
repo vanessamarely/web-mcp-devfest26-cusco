@@ -528,7 +528,7 @@ export const SLIDES: SlideContent[] = [
     label: 'Gracias',
     kind: 'end',
     title: '¡Sulpayki, Cusco! Gracias',
-    summary: ['Repo con el deck, la demo y la skill webmcp-agentic-web: instálala en tu agente de código y pídele que vuelva agéntica tu web. Tu memoria (PDF o HTML) se descarga desde la app en tu celular.'],
+    summary: ['Repo con el deck, la demo y la skill webmcp-agentic-web: instálala en tu agente de código y pídele que vuelva agéntica tu web. Escanea el QR de la app para descargar tu memoria (PDF o HTML) con tus notas y tu chasqui.'],
     notes: '"Sulpayki" es gracias en quechua. Invita a descargar la memoria y a probar la demo en su laptop con Chrome.',
     time: '28:15',
   },
