@@ -54,12 +54,19 @@ service cloud.firestore {
           && key.size() <= 40;
       }
 
+      // La hora de entrada (bono "llegar a tiempo") es la del servidor al crear y no se puede cambiar.
       match /players/{uid} {
         allow read: if true;
-        allow create, update: if isOwner(uid) && onlyKeys(['name', 'at'])
-          && request.resource.data.name is string
-          && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40;
+        allow create: if isOwner(uid) && onlyKeys(['name', 'at']) && validPlayerName()
+          && request.resource.data.at == request.time;
+        allow update: if isOwner(uid) && onlyKeys(['name', 'at']) && validPlayerName()
+          && request.resource.data.at == resource.data.at;
         allow delete: if isPresenter();
+      }
+
+      function validPlayerName() {
+        return request.resource.data.name is string
+          && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40;
       }
 
       // Una respuesta por pregunta: no se puede cambiar después de votar.

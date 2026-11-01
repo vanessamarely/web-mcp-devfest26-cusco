@@ -519,7 +519,7 @@ export const SLIDES: SlideContent[] = [
     label: 'Podio',
     kind: 'podium',
     title: 'Podio',
-    summary: ['Ganan quienes acertaron más rápido las 3 preguntas (+200 puntos por publicar su chasqui).'],
+    summary: ['Ganan quienes acertaron más rápido las 3 preguntas (para entrar al podio hay que acertar al menos una). Bonos: +100 por llegar a tiempo, +100 por publicar tu chasqui, +100 por una pregunta sobre el tema y +10 por reacción (máximo +100).'],
     notes: 'El primer lugar muestra su código de 4 letras en el celular para reclamar el premio.',
     time: '27:15',
   },

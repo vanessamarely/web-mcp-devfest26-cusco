@@ -34,13 +34,17 @@ export async function createFirebaseRealtime(): Promise<Realtime> {
       // Hora del SERVIDOR: la misma base que los timestamps de los votos → puntaje justo.
       await setDoc(session, { openedAt: { [q]: serverTimestamp() } }, { merge: true });
     },
+    async markEarlyEnd() {
+      const cur = (await getDoc(session)).data();
+      if (!cur?.earlyUntil) await setDoc(session, { earlyUntil: serverTimestamp() }, { merge: true });
+    },
     onSlide(cb) {
       return onSnapshot(session, (snap) => {
         const data = (snap.data({ serverTimestamps: 'estimate' }) ?? {}) as Record<string, unknown>;
         const openedAt: SlideState['openedAt'] = {};
         const raw = (data.openedAt ?? {}) as Record<string, unknown>;
         for (const q of QUESTION_IDS) if (raw[q]) openedAt[q] = ms(raw[q]);
-        cb({ ...emptySlide(), ...(data as Partial<SlideState>), openedAt });
+        cb({ ...emptySlide(), ...(data as Partial<SlideState>), openedAt, earlyUntil: ms(data.earlyUntil) ?? null });
       });
     },
 
@@ -62,7 +66,11 @@ export async function createFirebaseRealtime(): Promise<Realtime> {
       return new Set(names.filter((_, i) => snaps[i].exists() && snaps[i].data()?.uid !== uid()));
     },
     async join(name) {
-      await setDoc(doc(sub('players'), uid()), { name, at: serverTimestamp() });
+      // La hora de entrada se fija UNA vez (las reglas no dejan cambiarla): recargar no te quita el bono.
+      const ref = doc(sub('players'), uid());
+      const prev = await getDoc(ref);
+      if (prev.exists()) await updateDoc(ref, { name });
+      else await setDoc(ref, { name, at: serverTimestamp() });
     },
     async vote(q, option) {
       await setDoc(doc(sub('votes'), uid()), { [q]: option, [`${q}At`]: serverTimestamp() }, { merge: true });
@@ -89,7 +97,7 @@ export async function createFirebaseRealtime(): Promise<Realtime> {
     },
 
     onPlayers(cb) {
-      return onSnapshot(sub('players'), (snap) => cb(snap.docs.map((d): Player => ({ id: d.id, name: d.data().name }))));
+      return onSnapshot(sub('players'), (snap) => cb(snap.docs.map((d): Player => ({ id: d.id, name: d.data().name, at: ms(d.data({ serverTimestamps: 'estimate' }).at) }))));
     },
     onVotes(cb) {
       return onSnapshot(sub('votes'), (snap) =>
@@ -113,7 +121,7 @@ export async function createFirebaseRealtime(): Promise<Realtime> {
           first = false; // ignoramos el estado inicial: solo reacciones nuevas
           return;
         }
-        for (const change of snap.docChanges()) if (change.type !== 'removed') cb(change.doc.data().r as Reaction);
+        for (const change of snap.docChanges()) if (change.type !== 'removed') cb(change.doc.data().r as Reaction, change.doc.id);
       });
     },
     onChasquis(cb) {

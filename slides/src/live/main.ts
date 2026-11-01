@@ -457,7 +457,7 @@ function renderPodium(screen: HTMLElement) {
            <p>Acércate al escenario y muestra este código:</p><p class="code">${myCode}</p>`
         : pos >= 3
           ? `<h1>¡Quedaste en el puesto ${pos + 1}!</h1><p class="muted">Estás en el top 10 con ${me!.score.toLocaleString('es-PE')} puntos. ¡Gran carrera, chasqui!</p>`
-          : `<h1>¡Gracias por jugar!</h1><p class="muted">Acertaste ${correctCount(myVotes, live?.answers ?? {})} de 3. El podio está en la pantalla.</p>`
+          : `<h1>¡Gracias por jugar!</h1><p class="muted">Acertaste ${correctCount(myVotes, live?.answers ?? {})} de 3. Para entrar al podio hay que acertar al menos una; los bonos suben posiciones. El podio está en la pantalla.</p>`
     }
     ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${i === pos ? 'data-me' : ''}><span class="pl-avatar">${p.opts ? chasquiSVG(p.opts, p.name) : chasquiSilhouette()}</span><span class="pl-name">${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
     <p class="fine">Tu código: <b>${myCode}</b></p>
@@ -474,7 +474,7 @@ function renderWallCta(screen: HTMLElement) {
     <p class="kicker">Muro de chasquis</p>
     <h1>${chasqui.published ? '¡Tu chasqui está en la pantalla!' : '¿Ya creaste tu chasqui?'}</h1>
     ${chasqui.saved ? `<div class="end-doll">${chasquiSVG(chasqui.opts, chasqui.name)}<div><b>${esc(chasqui.name)}</b><span>“${esc(ENCARGOS[chasqui.encargo])}”</span></div></div>` : ''}
-    <p class="muted">Se dibuja en tu celular; al muro solo viajan las opciones que elegiste. Publicarlo suma <b>+200</b> al podio.</p>
+    <p class="muted">Se dibuja en tu celular; al muro solo viajan las opciones que elegiste. Publicarlo suma <b>+100</b> al podio.</p>
     <button class="btn wide primary" type="button" data-go-chasqui>${icon(Sparkles, 18)} ${chasqui.saved ? 'Editar mi chasqui' : 'Crear mi chasqui'}</button>
   </section>`;
   $('[data-go-chasqui]', screen).addEventListener('click', () => go('chasqui'));
@@ -603,7 +603,7 @@ function renderChasqui(screen: HTMLElement) {
       <button class="btn" type="button" data-download>${icon(Download, 18)} Descargar PNG</button>
       <button class="btn primary" type="button" data-save>${icon(Check, 18)} ${chasqui.saved ? 'Guardado' : 'Guardar en mi memoria'}</button>
     </div>
-    <button class="btn wide" type="button" data-publish>${icon(Send, 18)} ${chasqui.published ? 'Actualizar en el muro' : 'Publicar en el muro (+200)'}</button>
+    <button class="btn wide" type="button" data-publish>${icon(Send, 18)} ${chasqui.published ? 'Actualizar en el muro' : 'Publicar en el muro (+100)'}</button>
     <p class="fine" data-msg role="status"></p>
   </section>`;
 

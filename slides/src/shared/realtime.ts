@@ -43,6 +43,8 @@ export interface SlideState {
   /** respuestas YA reveladas (la presentadora las publica una por una al revelar) */
   answers: AnswerKey;
   podium: PodiumEntry[];
+  /** epoch ms (servidor) en que empezó el capítulo 01: quien entró antes suma "llegar a tiempo". */
+  earlyUntil?: number | null;
 }
 
 export const emptySlide = (): SlideState => ({ index: 0, total: 0, id: '', label: '', kind: 'content', qid: null, openedAt: {}, revealed: {}, results: {}, answers: {}, podium: [] });
@@ -58,6 +60,8 @@ export const REACTIONS: Record<Reaction, { label: string; color: string }> = {
 export interface Player {
   id: string;
   name: string;
+  /** epoch ms (servidor) de la PRIMERA vez que entró: base del bono "llegar a tiempo". */
+  at?: number;
 }
 
 /** El chasqui publicado en el muro: solo opciones (pocos bytes), el deck dibuja el SVG. */
@@ -97,6 +101,8 @@ export interface Realtime {
   patchSlide(s: Partial<SlideState>): Promise<void>;
   /** Marca la hora (del servidor) en que se abrió la pregunta: base del bono por rapidez. */
   openQuestion(q: QuestionId): Promise<void>;
+  /** Marca (una vez, con hora del servidor) el fin del bono "llegar a tiempo". */
+  markEarlyEnd(): Promise<void>;
   onSlide(cb: (s: SlideState) => void): Unsub;
 
   // Público
@@ -115,7 +121,8 @@ export interface Realtime {
   // Solo el deck agrega
   onPlayers(cb: (players: Player[]) => void): Unsub;
   onVotes(cb: (all: VoteRecord[]) => void): Unsub;
-  onReaction(cb: (r: Reaction) => void): Unsub;
+  /** Cada reacción nueva con el uid de quien la envió (para el bono por participar). */
+  onReaction(cb: (r: Reaction, uid: string) => void): Unsub;
   onChasquis(cb: (list: ChasquiData[]) => void): Unsub;
   /** Solo presentadora (las reglas no dejan leerlas a nadie más). */
   onQuestions(cb: (qs: AudienceQuestion[]) => void, onError?: (msg: string) => void): Unsub;
@@ -166,9 +173,22 @@ export function tally(all: VoteRecord[], q: QuestionId): PollResult {
 /** Segundos para el bono por rapidez: máximo al instante, 0 a los 60 s. */
 export const SPEED_WINDOW_S = 60;
 
-/** Puntos estilo Kahoot: acertar 500 + bono por rapidez (hasta 500); publicar tu chasqui +200. */
-export function scoreFor(vote: VoteRecord | undefined, openedAt: SlideState['openedAt'], hasChasqui: boolean, answers: AnswerKey): number {
-  let score = hasChasqui ? 200 : 0;
+/** Bonos fuera de las preguntas (todos con tope: el podio lo deciden sobre todo los aciertos). */
+export const BONUS = { chasqui: 100, early: 100, asked: 100, reactionEach: 10, reactionMax: 100 } as const;
+
+export interface Extras {
+  chasqui?: boolean;
+  /** entró antes de empezar el capítulo 01 */
+  early?: boolean;
+  /** envió al menos una pregunta sobre el tema */
+  asked?: boolean;
+  /** reacciones enviadas */
+  reactions?: number;
+}
+
+/** Puntos: acertar 500 + bono por rapidez (hasta 500) por pregunta, más los bonos con tope. */
+export function scoreFor(vote: VoteRecord | undefined, openedAt: SlideState['openedAt'], extras: Extras, answers: AnswerKey): number {
+  let score = (extras.chasqui ? BONUS.chasqui : 0) + (extras.early ? BONUS.early : 0) + (extras.asked ? BONUS.asked : 0) + Math.min(BONUS.reactionMax, (extras.reactions ?? 0) * BONUS.reactionEach);
   if (!vote) return score;
   for (const q of Object.keys(vote.votes) as QuestionId[]) {
     if (!answers[q] || vote.votes[q] !== answers[q]!.correct) continue;

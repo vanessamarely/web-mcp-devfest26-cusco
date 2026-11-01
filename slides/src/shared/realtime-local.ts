@@ -6,6 +6,8 @@ import { emptySlide, type AudienceQuestion, type ChasquiData, type Player, type 
 interface LocalDb {
   slide: SlideState;
   players: Record<string, string>;
+  /** uid → epoch ms de la primera entrada */
+  joinedAt: Record<string, number>;
   /** nameKey → uid */
   names: Record<string, string>;
   votes: Record<string, VoteRecord>;
@@ -15,7 +17,7 @@ interface LocalDb {
 }
 
 const KEY = `${NS}.local.db`;
-const empty = (): LocalDb => ({ slide: emptySlide(), players: {}, names: {}, votes: {}, chasquis: {}, questions: {}, answers: null });
+const empty = (): LocalDb => ({ slide: emptySlide(), players: {}, joinedAt: {}, names: {}, votes: {}, chasquis: {}, questions: {}, answers: null });
 
 function read(): LocalDb {
   try {
@@ -31,7 +33,7 @@ function read(): LocalDb {
 export function createLocalRealtime(): Realtime {
   const channel = new BroadcastChannel(`${NS}-live`);
   const listeners = new Set<(db: LocalDb) => void>();
-  const reactionListeners = new Set<(r: Reaction) => void>();
+  const reactionListeners = new Set<(r: Reaction, uid: string) => void>();
 
   let uid: string | null;
   try {
@@ -59,7 +61,7 @@ export function createLocalRealtime(): Realtime {
   };
   channel.onmessage = (e) => {
     if (e.data?.type === 'db') emit();
-    if (e.data?.type === 'reaction') reactionListeners.forEach((l) => l(e.data.r));
+    if (e.data?.type === 'reaction') reactionListeners.forEach((l) => l(e.data.r, e.data.uid));
   };
   const sub = (fn: (db: LocalDb) => void) => {
     listeners.add(fn);
@@ -81,6 +83,9 @@ export function createLocalRealtime(): Realtime {
     async openQuestion(q: QuestionId) {
       write((db) => (db.slide.openedAt = { ...db.slide.openedAt, [q]: Date.now() }));
     },
+    async markEarlyEnd() {
+      write((db) => (db.slide.earlyUntil ??= Date.now()));
+    },
     onSlide: (cb) => sub((db) => cb(db.slide)),
 
     async reserveName(name) {
@@ -100,7 +105,11 @@ export function createLocalRealtime(): Realtime {
       return new Set(names.filter((n) => db.names[nameKey(n)] && db.names[nameKey(n)] !== me));
     },
     async join(name) {
-      write((db) => (db.players[me] = name));
+      write((db) => {
+        db.players[me] = name;
+        db.joinedAt ??= {};
+        db.joinedAt[me] ??= Date.now();
+      });
     },
     async vote(q, option) {
       write((db) => {
@@ -113,8 +122,8 @@ export function createLocalRealtime(): Realtime {
     },
     onMyVotes: (cb) => sub((db) => cb((db.votes[me]?.votes ?? {}) as Votes)),
     async react(r) {
-      channel.postMessage({ type: 'reaction', r });
-      reactionListeners.forEach((l) => l(r));
+      channel.postMessage({ type: 'reaction', r, uid: me });
+      reactionListeners.forEach((l) => l(r, me));
     },
     async ask(q) {
       const id = crypto.randomUUID().slice(0, 8);
@@ -124,7 +133,7 @@ export function createLocalRealtime(): Realtime {
       write((db) => (db.chasquis[me] = { ...d, id: me, createdAt: db.chasquis[me]?.createdAt ?? Date.now(), hidden: db.chasquis[me]?.hidden ?? false }));
     },
 
-    onPlayers: (cb) => sub((db) => cb(Object.entries(db.players).map(([id, name]): Player => ({ id, name })))),
+    onPlayers: (cb) => sub((db) => cb(Object.entries(db.players).map(([id, name]): Player => ({ id, name, at: db.joinedAt?.[id] })))),
     onVotes: (cb) => sub((db) => cb(Object.values(db.votes))),
     onReaction(cb) {
       reactionListeners.add(cb);

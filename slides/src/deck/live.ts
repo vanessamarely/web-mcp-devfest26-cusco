@@ -13,7 +13,7 @@ import { SLIDE_BY_ID } from '../shared/content';
 import { NS, PUBLIC_DEMO_URL, PUBLIC_SLIDES_URL, REPO_URL, SESSION_ID, prettyUrl, publicLiveUrl } from '../shared/config';
 import { ENCARGOS, chasquiSilhouette, chasquiSVG, type ChasquiOptions } from '../shared/chasqui';
 import { QUESTIONS, QUESTION_IDS, parseAnswerKey, type AnswerKey, type QuestionId } from '../shared/questions';
-import { REACTIONS, getRealtime, podiumKey, scoreFor, tally, uniqueCodes, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
+import { REACTIONS, correctCount, getRealtime, podiumKey, scoreFor, tally, uniqueCodes, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
 import { esc } from '../shared/esc';
 import { createBursts } from './reaction-bursts';
 
@@ -128,6 +128,8 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     void send(rt.patchSlide({ index, total: sections.length, id: s.dataset.id ?? '', label: s.dataset.label ?? '', kind: c?.kind ?? 'content', qid }));
     // La primera vez que se muestra una pregunta, se marca la hora de apertura (bono por rapidez).
     if (qid && !slide?.openedAt?.[qid]) void send(rt.openQuestion(qid));
+    // "Llegar a tiempo": quien entró antes del capítulo 01 suma +100 (se marca una sola vez).
+    if (s.dataset.id === 'sec-mcp' && !slide?.earlyUntil) void send(rt.markEarlyEnd());
     if (c?.kind === 'podium') {
       publishPodium();
       renderPodium();
@@ -383,14 +385,19 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     const ids = new Set<string>([...players.map((p) => p.id), ...votes.map((v) => v.uid), ...withChasqui]);
     const byVote = new Map(votes.map((v) => [v.uid, v]));
     const names = new Map(players.map((p) => [p.id, p.name]));
+    const joinedAt = new Map(players.map((p) => [p.id, p.at]));
     return [...ids]
       .map((uid) => {
         const v = byVote.get(uid);
         const speed = Object.values(v?.at ?? {}).reduce((s, t) => s + (t ?? 0), 0);
         const own = chasquis.find((c) => c.id === uid && !c.hidden);
-        return { uid, name: names.get(uid) ?? own?.name ?? 'Chasqui anónimo', score: scoreFor(v, slide?.openedAt ?? {}, withChasqui.has(uid), answers), speed, code: winnerCode(uid), opts: own?.opts ?? null };
+        const joined = joinedAt.get(uid);
+        const early = Boolean(joined) && (!slide?.earlyUntil || joined! <= slide.earlyUntil);
+        const extras = { chasqui: withChasqui.has(uid), early, asked: askedSet.has(uid), reactions: part.reactions[uid] ?? 0 };
+        return { uid, name: names.get(uid) ?? own?.name ?? 'Chasqui anónimo', score: scoreFor(v, slide?.openedAt ?? {}, extras, answers), speed, code: winnerCode(uid), opts: own?.opts ?? null };
       })
-      .filter((r) => r.score > 0)
+      // Para entrar al podio hay que acertar al menos una pregunta: los bonos solo suben posiciones.
+      .filter((r) => r.score > 0 && correctCount(byVote.get(r.uid)?.votes ?? {}, answers) > 0)
       .sort((a, b) => b.score - a.score || a.speed - b.speed); // empate: quien respondió antes
   }
   const avatar = (opts: ChasquiOptions | null | undefined, name: string) => (opts ? chasquiSVG(opts, `Chasqui de ${name}`) : chasquiSilhouette(`${name} no publicó su chasqui`));
@@ -438,11 +445,39 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
   // ── Reacciones flotantes ──────────────────────────────────────────────
   const layer = document.querySelector<HTMLElement>('.reactions')!;
   let floating = 0;
+  // Participación (solo la presentadora la necesita para el podio). Se guarda en este navegador
+  // para no perderla si el deck se recarga; las preguntas respondidas y quitadas siguen contando.
+  const PART_KEY = `${NS}.deck.participation.${SESSION_ID}`;
+  const part: { reactions: Record<string, number>; asked: string[] } = (() => {
+    try {
+      return { reactions: {}, asked: [], ...JSON.parse(localStorage.getItem(PART_KEY) ?? '{}') };
+    } catch {
+      return { reactions: {}, asked: [] };
+    }
+  })();
+  const askedSet = new Set(part.asked);
+  let partTimer = 0;
+  const savePart = () => {
+    clearTimeout(partTimer);
+    partTimer = window.setTimeout(() => {
+      try {
+        localStorage.setItem(PART_KEY, JSON.stringify({ reactions: part.reactions, asked: [...askedSet] }));
+      } catch {
+        /* noop */
+      }
+      renderPodium();
+    }, 800);
+  };
+
   // Oleadas de reacciones → efectos en pantalla (chasqui, cóndor, Inti).
   const bursts = createBursts(() => players.length);
   Object.assign(window, { deckBurst: (k: Reaction) => bursts.show(k) });
-  rt.onReaction((r) => {
+  rt.onReaction((r, uid) => {
     bursts.add(r);
+    if (uid && r !== 'ask' && (part.reactions[uid] ?? 0) < 10) {
+      part.reactions[uid] = (part.reactions[uid] ?? 0) + 1;
+      savePart();
+    }
     if (floating > 24 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const meta = REACTIONS[r];
     if (!meta) return;
@@ -486,6 +521,9 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     unsubQuestions = rt.onQuestions(
       (qs) => {
         questions = qs;
+        let added = false;
+        for (const q of qs) if (q.uid && !askedSet.has(q.uid)) (askedSet.add(q.uid), (added = true));
+        if (added) savePart();
         qaError = '';
         renderQuestions();
         syncPresenterUi();

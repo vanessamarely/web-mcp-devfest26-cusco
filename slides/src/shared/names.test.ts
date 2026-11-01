@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
-import { podiumKey, uniqueCodes, winnerCode } from './realtime';
+import { BONUS, podiumKey, scoreFor, uniqueCodes, winnerCode } from './realtime';
 import { TOTAL_COMBINATIONS, allNames, claimUniqueName, nameKey, numbered, randomName } from './names';
 
 describe('apodos', () => {
@@ -61,5 +61,13 @@ describe('códigos del podio', () => {
     const codes = uniqueCodes([...pair!, 'otro']);
     expect(new Set(codes).size).toBe(3);
     expect(codes[0].length).toBeGreaterThan(4);
+  });
+});
+describe('puntos del podio', () => {
+  it('los bonos tienen tope y no superan a una respuesta correcta', () => {
+    const all = scoreFor(undefined, {}, { chasqui: true, early: true, asked: true, reactions: 99 }, {});
+    expect(all).toBe(BONUS.chasqui + BONUS.early + BONUS.asked + BONUS.reactionMax);
+    expect(all).toBe(400);
+    expect(scoreFor(undefined, {}, { reactions: 3 }, {})).toBe(30);
   });
 });
