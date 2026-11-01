@@ -261,3 +261,10 @@ main { max-width: 520px; margin: 0 auto; min-height: 60dvh; }
 .menu-panel .theme-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; }
 .menu-panel .theme-row button { justify-content: center; padding: 8px 4px; font-size: 13px; border: 1.5px solid color-mix(in srgb, var(--ink) 20%, transparent); }
 .menu-panel .theme-row button[aria-pressed='true'] { background: var(--ht-yellow); color: #1e1e1e; }
+.podium-list li { align-items: center; }
+.pl-avatar { width: 30px; flex: none; }
+.pl-avatar svg { width: 100%; height: auto; display: block; }
+.pl-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.winner-avatar { width: 120px; margin: 0 auto; }
+.winner-avatar svg { width: 100%; height: auto; display: block; animation: bob 1.2s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-8px); } }

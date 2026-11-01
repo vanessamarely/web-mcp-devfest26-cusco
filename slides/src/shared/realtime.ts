@@ -21,6 +21,8 @@ export interface PodiumEntry {
   name: string;
   score: number;
   code: string;
+  /** Opciones del chasqui que publicó (pocos bytes); sin chasqui → silueta. */
+  opts?: ChasquiOptions | null;
 }
 
 export interface SlideState {

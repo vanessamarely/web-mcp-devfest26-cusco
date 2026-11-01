@@ -9,7 +9,7 @@ import { Brain, Check, Circle, Diamond, Download, FileText, Flame, GitBranch, He
 import { SLIDES, SLIDE_BY_ID, type SlideContent } from '../shared/content';
 import { EVENT, NS, PUBLIC_DEMO_URL, REPO_URL, SKILL_URL, TALK_TITLE } from "../shared/config";
 import { downloadFile, keepsakeHTML, keepsakeMarkdown, type SavedNote } from '../shared/keepsake';
-import { ACCESORIOS, DEFAULT_CHASQUI, ENCARGOS, EXPRESIONES, LEYENDA, PALLAYS, PIELES, PONCHOS, TOCADOS, chasquiPNG, chasquiSVG, normalizeChasqui, randomChasqui, type ChasquiOptions } from '../shared/chasqui';
+import { ACCESORIOS, DEFAULT_CHASQUI, ENCARGOS, EXPRESIONES, LEYENDA, PALLAYS, PIELES, PONCHOS, TOCADOS, chasquiPNG, chasquiSilhouette, chasquiSVG, normalizeChasqui, randomChasqui, type ChasquiOptions } from '../shared/chasqui';
 import { claimUniqueName, cleanName, randomName, TOTAL_COMBINATIONS } from '../shared/names';
 import { QUESTIONS, type QuestionId } from '../shared/questions';
 import { REACTIONS, correctCount, getRealtime, winnerCode, type Reaction, type Realtime, type SlideState, type Votes } from '../shared/realtime';
@@ -441,12 +441,12 @@ function renderPodium(screen: HTMLElement) {
     <p class="kicker">${icon(Trophy, 16)} Podio</p>
     ${
       winner
-        ? `<h1>¡Ganaste, ${esc(name)}!</h1><p>Acércate al escenario y muestra este código:</p><p class="code">${myCode}</p>`
+        ? `${chasqui.saved ? `<div class="winner-avatar">${chasquiSVG(chasqui.opts, chasqui.name)}</div>` : ''}<h1>¡Ganaste, ${esc(name)}!</h1><p>Acércate al escenario y muestra este código:</p><p class="code">${myCode}</p>`
         : pos > 0
           ? `<h1>Quedaste en el puesto ${pos + 1}</h1><p class="muted">${podium[pos].score.toLocaleString('es-PE')} puntos. ¡Gran carrera, chasqui!</p>`
           : `<h1>¡Gracias por jugar!</h1><p class="muted">Acertaste ${correctCount(myVotes, live?.answers ?? {})} de 3. El podio está en la pantalla.</p>`
     }
-    ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${p.code === myCode ? 'data-me' : ''}><span>${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
+    ${podium.length ? `<ol class="podium-list">${podium.slice(0, 5).map((p, i) => `<li ${p.code === myCode ? 'data-me' : ''}><span class="pl-avatar">${p.opts ? chasquiSVG(p.opts, p.name) : chasquiSilhouette()}</span><span class="pl-name">${i + 1}. ${esc(p.name)}</span><b>${p.score.toLocaleString('es-PE')}</b></li>`).join('')}</ol>` : '<p class="muted">Esperando el podio…</p>'}
     <p class="fine">Tu código: <b>${myCode}</b></p>
   </section>`;
 }

@@ -778,3 +778,18 @@ section[data-deck-active] .lm-condor { animation: glide 9s ease-in-out infinite;
 :root[data-ratio='4-3'] .spotlight { width: 180px; } :root[data-ratio='4-3'] .spot-art { width: 90px; }
 /* Podio: código del ganador en una píldora legible */
 .podium .code-chip { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border-radius: var(--pill); background: var(--ink); color: var(--bg); font: 600 17px/1 var(--mono); letter-spacing: 0.12em; }
+
+/* Podio con avatares: cada chasqui de pie sobre su escalón */
+.podium { margin-top: 120px; }
+.podium .step { position: relative; }
+.podium .step:nth-child(1) { height: 170px; } .podium .step:nth-child(2) { height: 220px; } .podium .step:nth-child(3) { height: 140px; }
+.podium-avatar { position: absolute; bottom: calc(100% - 6px); left: 50%; width: 82px; transform: translateX(-50%); }
+.podium .step:nth-child(2) .podium-avatar { width: 104px; }
+.podium-avatar svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.12)); }
+section[data-deck-active] .podium-avatar svg { animation: hop 900ms cubic-bezier(0.3, 1.4, 0.5, 1) 900ms both, bob 2.4s ease-in-out 2s infinite; }
+.podium .step { justify-content: center; align-content: center; }
+.podium-rest .pill { padding: 4px 14px 4px 6px; }
+.mini-avatar { width: 26px; display: inline-block; }
+.mini-avatar svg { width: 100%; height: auto; display: block; }
+:root[data-ratio='4-3'] .podium { margin-top: 100px; } :root[data-ratio='4-3'] .podium-avatar { width: 66px; } :root[data-ratio='4-3'] .podium .step:nth-child(2) .podium-avatar { width: 84px; }
+@media (max-width: 640px) { .podium { margin-top: 80px; } .podium-avatar { width: 54px; } .podium .step:nth-child(2) .podium-avatar { width: 64px; } }

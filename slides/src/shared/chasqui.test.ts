@@ -21,3 +21,12 @@ describe('chasqui', () => {
     expect(chasquiSVG(normalizeChasqui({}), '<script>')).not.toContain('<script>');
   });
 });
+
+describe('silueta del podio', () => {
+  it('es un SVG válido y escapa el título', async () => {
+    const { chasquiSilhouette } = await import('./chasqui');
+    const svg = chasquiSilhouette('<b>Ana</b> no publicó');
+    expect(new DOMParser().parseFromString(svg, 'image/svg+xml').querySelector('parsererror')).toBeNull();
+    expect(svg).not.toContain('<b>Ana</b>');
+  });
+});

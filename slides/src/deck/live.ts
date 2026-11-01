@@ -11,7 +11,7 @@ import QRCode from 'qrcode';
 import { Brain, Check, Circle, Diamond, Flame, Heart, MessageCircleQuestion, Square, Triangle, createElement, type IconNode } from 'lucide';
 import { SLIDE_BY_ID } from '../shared/content';
 import { NS, PUBLIC_DEMO_URL, PUBLIC_SLIDES_URL, REPO_URL, SESSION_ID, prettyUrl, publicLiveUrl } from '../shared/config';
-import { ENCARGOS, chasquiSVG } from '../shared/chasqui';
+import { ENCARGOS, chasquiSilhouette, chasquiSVG, type ChasquiOptions } from '../shared/chasqui';
 import { QUESTIONS, QUESTION_IDS, parseAnswerKey, type AnswerKey, type QuestionId } from '../shared/questions';
 import { REACTIONS, getRealtime, scoreFor, tally, winnerCode, type AudienceQuestion, type ChasquiData, type Player, type Reaction, type SlideState, type VoteRecord } from '../shared/realtime';
 import { esc } from '../shared/esc';
@@ -387,11 +387,13 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
       .map((uid) => {
         const v = byVote.get(uid);
         const speed = Object.values(v?.at ?? {}).reduce((s, t) => s + (t ?? 0), 0);
-        return { uid, name: names.get(uid) ?? chasquis.find((c) => c.id === uid)?.name ?? 'Chasqui anónimo', score: scoreFor(v, slide?.openedAt ?? {}, withChasqui.has(uid), answers), speed, code: winnerCode(uid) };
+        const own = chasquis.find((c) => c.id === uid && !c.hidden);
+        return { uid, name: names.get(uid) ?? own?.name ?? 'Chasqui anónimo', score: scoreFor(v, slide?.openedAt ?? {}, withChasqui.has(uid), answers), speed, code: winnerCode(uid), opts: own?.opts ?? null };
       })
       .filter((r) => r.score > 0)
       .sort((a, b) => b.score - a.score || a.speed - b.speed); // empate: quien respondió antes
   }
+  const avatar = (opts: ChasquiOptions | null | undefined, name: string) => (opts ? chasquiSVG(opts, `Chasqui de ${name}`) : chasquiSilhouette(`${name} no publicó su chasqui`));
   const isPodiumSlide = () => SLIDE_BY_ID.get(active().dataset.id ?? '')?.kind === 'podium';
   function renderPodium() {
     const box = document.querySelector<HTMLElement>('[data-podium]');
@@ -399,7 +401,7 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     // Solo la presentadora tiene las respuestas: el resto ve el podio que ella publica.
     const list = presenter ? ranking() : (slide?.podium ?? []);
     // Solo se redibuja (y se publica) si el ranking cambió: evita bucles y reinicios de la animación.
-    const sig = JSON.stringify(list.slice(0, 10).map((r) => [r.name, r.score, r.code]));
+    const sig = JSON.stringify(list.slice(0, 10).map((r) => [r.name, r.score, r.code, r.opts ?? null]));
     if (sig === podiumSig && box.childElementCount) return;
     podiumSig = sig;
     if (presenter && isPodiumSlide() && sig !== publishedSig) schedulePodiumPublish();
@@ -408,12 +410,12 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
     box.innerHTML = order
       .map((r, i) =>
         r
-          ? `<div class="step"><span class="medal">${medal[i]}</span><span class="name">${esc(r.name)}</span><span class="pts">${r.score.toLocaleString('es-PE')} pts</span>${i === 1 ? `<span class="code-chip">${esc(r.code)}</span>` : ''}</div>`
+          ? `<div class="step"><div class="podium-avatar">${avatar(r.opts, r.name)}</div><span class="medal">${medal[i]}</span><span class="name">${esc(r.name)}</span><span class="pts">${r.score.toLocaleString('es-PE')} pts</span>${i === 1 ? `<span class="code-chip">${esc(r.code)}</span>` : ''}</div>`
           : '<div class="step"><span class="pts">—</span></div>',
       )
       .join('');
     const rest = document.querySelector<HTMLElement>('[data-rest]');
-    if (rest) rest.innerHTML = list.slice(3, 10).map((r, i) => `<span class="pill">${i + 4}. ${esc(r.name)} · ${r.score.toLocaleString('es-PE')}</span>`).join('');
+    if (rest) rest.innerHTML = list.slice(3, 10).map((r, i) => `<span class="pill"><span class="mini-avatar">${avatar(r.opts, r.name)}</span>${i + 4}. ${esc(r.name)} · ${r.score.toLocaleString('es-PE')}</span>`).join('');
   }
   let podiumTimer = 0;
   let podiumSig = '';
@@ -424,8 +426,8 @@ export async function initLive(stage: DeckStage, sections: HTMLElement[]) {
   }
   function publishPodium() {
     if (!presenter) return;
-    const top = ranking().slice(0, 10).map(({ name, score, code }) => ({ name, score, code }));
-    publishedSig = JSON.stringify(top.map((r) => [r.name, r.score, r.code]));
+    const top = ranking().slice(0, 10).map(({ name, score, code, opts }) => ({ name, score, code, opts }));
+    publishedSig = JSON.stringify(top.map((r) => [r.name, r.score, r.code, r.opts ?? null]));
     void send(rt.patchSlide({ podium: top }));
   }
 

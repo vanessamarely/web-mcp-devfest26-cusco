@@ -446,3 +446,14 @@ export async function chasquiPNGDataUrl(opts: ChasquiOptions, size = 360): Promi
   canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height);
   return canvas.toDataURL('image/png');
 }
+
+/** Silueta para quien no publicó su chasqui (podio). */
+export function chasquiSilhouette(title = 'Sin chasqui'): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -24 240 344" role="img" aria-label="${escapeXml(title)}"><title>${escapeXml(title)}</title>
+  <g fill="#c4c7c5" stroke="#8a8d8b" stroke-width="3" stroke-linejoin="round">
+    <path d="M80 146 C100 136 140 136 160 146 L186 236 C150 248 90 248 54 236 Z"/>
+    <rect x="94" y="236" width="20" height="50" rx="6"/><rect x="126" y="236" width="20" height="50" rx="6"/>
+    <circle cx="120" cy="96" r="52"/>
+  </g>
+  <text x="120" y="116" text-anchor="middle" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="#8a8d8b">?</text></svg>`;
+}
