@@ -131,15 +131,12 @@ export function vinicunca(): string {
   );
 }
 
-/** Portada y cierre: Inti, cóndor y la silueta de Huayna Picchu sobre las montañas de colores. */
+/** Portada y cierre: el cielo de Cusco (Inti, nubes y cóndor) sobre la montaña de colores (Vinicunca). */
 export function coverSky(): string {
   return `<svg class="landmark-svg" viewBox="0 0 520 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g transform="translate(60 0)">
     ${inti(300, 130, 44)}
     ${cloud(40, 90, 0.9)}${cloud(170, 190, 0.6)}
     ${condor(120, 260, 0.7)}
-    <path d="M150 470 L228 230 Q244 206 258 232 L320 420 L360 470 Z" fill="#34a853" opacity=".9" ${S}/>
-    <path d="M228 230 Q244 206 258 232 L276 300 C262 292 248 298 238 312 Z" fill="#5cdb6d" ${S}/>
-    <path d="M196 400 h120 M184 440 h150" stroke="#0b8043" stroke-width="3" stroke-dasharray="10 8"/>
   </g></svg>`;
 }
 
