@@ -736,3 +736,12 @@ section[data-deck-active] .lm-condor { animation: glide 9s ease-in-out infinite;
 @keyframes glide { 0%, 100% { translate: 0 0; rotate: 0deg; } 25% { translate: 60px -14px; rotate: 4deg; } 50% { translate: 120px 0; rotate: 0deg; } 75% { translate: 60px 12px; rotate: -4deg; } }
 @media (prefers-reduced-motion: reduce) { .lm-rays, .lm-cloud, .lm-condor { animation: none !important; } }
 @media (max-width: 640px) { .cover-landmark { width: 100%; top: auto; height: 45%; } .section-art .runner-art { width: 30%; } }
+/* Cierre: dos QR idénticos y alineados (mismo ancho, misma altura, texto centrado). */
+.thanks-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 16px; align-items: stretch; justify-content: start; }
+.thanks-grid .qr-card { width: 220px; grid-template-rows: auto auto 1fr; align-content: start; padding: 14px 12px; }
+.thanks-grid .qr-card > div:first-child { width: 168px; }
+.thanks-grid .qr-card strong { font-size: 19px; }
+.thanks-grid .qr-card span { font-size: 12.5px; line-height: 1.3; overflow-wrap: anywhere; }
+:root[data-ratio='4-3'] .thanks-grid { grid-template-columns: repeat(2, 190px); }
+:root[data-ratio='4-3'] .thanks-grid .qr-card { width: 190px; }
+:root[data-ratio='4-3'] .thanks-grid .qr-card > div:first-child { width: 146px; }
