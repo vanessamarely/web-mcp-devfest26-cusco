@@ -3,8 +3,6 @@
 // (borrador W3C del 27-oct-2026):
 //   registerTool(tool, { signal, exposedTo }) · getTools() · executeTool(tool, input, { signal })
 //   eventos toolchange · toolactivated · toolcancel · formularios con toolname/tooldescription.
-// Lo que YA NO existe y por eso no se implementa: provideContext(), clearContext(),
-// unregisterTool() y execute(input, client) con client.requestUserInteraction().
 
 export interface ToolAnnotations {
   readOnlyHint?: boolean;
@@ -85,7 +83,7 @@ class ModelContextPolyfill extends EventTarget implements ModelContext {
   }
 
   async executeTool(tool: RegisteredTool, input: Record<string, unknown> = {}, opts: { signal?: AbortSignal } = {}) {
-    if (typeof input === 'string') throw new TypeError('executeTool: el input debe ser un objeto (el texto JSON está obsoleto)');
+    if (typeof input === 'string') throw new TypeError('executeTool: el input debe ser un objeto');
     const t = this.tools.get(tool.name);
     if (!t) throw new DOMException(`No existe la tool "${tool.name}"`, 'NotFoundError');
     const err = validate(t.inputSchema, input);

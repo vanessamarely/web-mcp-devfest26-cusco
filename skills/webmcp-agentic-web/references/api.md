@@ -1,6 +1,6 @@
-# WebMCP API (W3C draft of 27 Oct 2026 · Chrome docs)
+# WebMCP API (current W3C draft · Chrome docs)
 
-Entry point: **`document.modelContext`** (secure contexts only). `navigator.modelContext` is deprecated.
+Entry point: **`document.modelContext`** (secure contexts only).
 
 ## Imperative: registerTool
 
@@ -64,7 +64,7 @@ controller.abort(); // unregisters the tool (in-flight executions are not cancel
 
 ```js
 const tools = await document.modelContext.getTools(/* { fromOrigins: [...] } */);
-const result = await document.modelContext.executeTool(tools[0], { id: 'x', day: 2 }); // object, not JSON text (Chrome 155+)
+const result = await document.modelContext.executeTool(tools[0], { id: 'x', day: 2 }); // input is an object
 document.modelContext.addEventListener('toolchange', render);
 document.modelContext.addEventListener('toolactivated', (e) => log(e.toolName));
 document.modelContext.addEventListener('toolcancel', (e) => log(e.toolName));
@@ -94,7 +94,6 @@ const raw = await session.prompt(userMessage, {
 - **Declarative forms**: without `toolautosubmit`, Chrome fills the form and waits for the user to submit it (the agent's call stays pending until then). Add `toolautosubmit` for safe actions such as search; leave it off when a human should review before submitting.
 - **Automated tests**: launch Chrome with `--enable-features=WebMCPTesting` (same as the flag) to test the native API headlessly.
 
-- Chrome with `chrome://flags/#enable-webmcp-testing` or an Origin Trial token.
 - Model Context Tool Inspector extension (Chrome Web Store, needs a Gemini API key).
 - DevTools to debug tools and check how the JSON Schema is parsed.
 - A polyfill for browsers without `document.modelContext` must follow the current API (see the demo in this repo: `demo/src/webmcp.ts`).

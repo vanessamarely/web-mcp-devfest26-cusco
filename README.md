@@ -18,8 +18,7 @@ Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore
 | [`slides/`](slides) | Deck (32 slides) con proporciones **4:3 · 16:10 · 16:9 · 21:9 · extendida** (tecla **A**/**E**), claro/oscuro (**L**), alto contraste (**H**). Consola en `/presenter/` (**P**). App de asistentes en `/live/`: apodos únicos para 300+ personas (con numeración si se repiten), 3 preguntas por el podio, **crea tu chasqui** (PNG), notas y memoria en **PDF / HTML / Markdown**. |
 | [`demo/`](demo) | **Ruta Chasqui**: marketplace de experiencias en Cusco (precios ficticios) con 8 tools de WebMCP (1 declarativa). Agente con WebMCP (Gemini Nano o simulado) vs. agente de clics, botón **Rediseñar** y seguridad (`untrustedContentHint`, `consequentialHint`). |
 | [`scripts/record-clips.mjs`](scripts/record-clips.mjs) | Graba los clips de la demo que se muestran en los slides. |
-| [`docs/`](docs) | Cambios de WebMCP respecto a charlas anteriores. |
-| [`skills/webmcp-agentic-web/`](skills/webmcp-agentic-web) | **Skill para tu agente de código**: vuelve agéntica tu web con WebMCP (intenciones → tools, las 10 reglas, seguridad, migración desde la API vieja). |
+| [`skills/webmcp-agentic-web/`](skills/webmcp-agentic-web) | **Skill para tu agente de código**: vuelve agéntica tu web con WebMCP (intenciones → tools, las 10 reglas, seguridad, cómo probar). |
 
 ## Interacción con el público
 
@@ -40,11 +39,10 @@ Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore
 
 ## Skill para tu agente de código
 
-La skill [`webmcp-agentic-web`](skills/webmcp-agentic-web/SKILL.md) convierte la charla en una guía que tu agente (Claude Code, Gemini CLI, Antigravity, Cursor…) aplica en tu proyecto: identifica las intenciones de tu app, crea las tools (formularios declarativos y `registerTool`), aplica las 10 reglas (validación en código, `consequentialHint`, `untrustedContentHint`) y migra código que use `navigator.modelContext`, `provideContext` o `requestUserInteraction`.
+La skill [`webmcp-agentic-web`](skills/webmcp-agentic-web/SKILL.md) convierte la charla en una guía que tu agente (Claude Code, Gemini CLI, Antigravity, Cursor…) aplica en tu proyecto: identifica las intenciones de tu app, crea las tools (formularios declarativos y `registerTool`), aplica las 10 reglas (validación en código, `consequentialHint`, `untrustedContentHint`).
 
 - [`SKILL.md`](skills/webmcp-agentic-web/SKILL.md): flujo de trabajo, 10 reglas, antipatrones y formato de reporte.
 - [`references/api.md`](skills/webmcp-agentic-web/references/api.md): API actual con código, agente in-page con Gemini Nano y cómo probar.
-- [`references/migration.md`](skills/webmcp-agentic-web/references/migration.md): de la API vieja a la actual.
 
 Instalación en Claude Code (para todos tus proyectos):
 

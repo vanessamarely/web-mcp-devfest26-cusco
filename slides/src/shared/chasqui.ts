@@ -45,7 +45,7 @@ export const ENCARGOS = [
   'Mi formulario ya tiene toolname',
   'Gemini Nano corre en mi laptop',
   'MCP en el backend, WebMCP en el navegador',
-  'Adiós provideContext, hola AbortSignal',
+  'AbortSignal para quitar tools',
   'Quiero probar el Origin Trial',
   'untrustedContentHint para las reseñas',
   'Mi sitio está listo para agentes',

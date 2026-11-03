@@ -45,10 +45,10 @@ export const QUESTIONS: Record<QuestionId, Question> = {
   q2: {
     id: 'q2',
     topic: 'La API de WebMCP',
-    text: 'Con la API actual de WebMCP, ¿cómo dejas de exponer una tool registrada con registerTool()?',
+    text: 'En WebMCP, ¿cómo dejas de exponer una tool registrada con registerTool()?',
     options: [
-      { id: 'a', label: 'Llamando a navigator.modelContext.clearContext()' },
-      { id: 'b', label: 'Llamando a provideContext({ tools: [] })' },
+      { id: 'a', label: 'Quitando el atributo toolautosubmit' },
+      { id: 'b', label: 'Registrando otra tool con el mismo nombre' },
       { id: 'c', label: 'Abortando el AbortSignal que pasaste en las opciones de registerTool()' },
       { id: 'd', label: 'Recargando el modelo de Gemini Nano' },
     ],

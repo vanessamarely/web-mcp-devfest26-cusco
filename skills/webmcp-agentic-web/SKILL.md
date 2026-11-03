@@ -1,6 +1,6 @@
 ---
 name: webmcp-agentic-web
-description: 'Make a website "agentic" with WebMCP: expose the site''s real capabilities as tools that AI agents can call (document.modelContext.registerTool, declarative <form toolname>), instead of letting agents scrape the DOM and simulate clicks. Use when building, reviewing, or migrating a web app so agents (in-page assistants with Gemini Nano / Prompt API, browser agents, extensions) can use it reliably and safely. Also use when users mention WebMCP, navigator.modelContext, document.modelContext, provideContext, registerTool, toolname/tooldescription, agentInvoked, consequentialHint, readOnlyHint, untrustedContentHint, MCP vs WebMCP, "agentic web", or "make my site work with agents", even if they do not say WebMCP.'
+description: 'Make a website "agentic" with WebMCP: expose the site''s real capabilities as tools that AI agents can call (document.modelContext.registerTool, declarative <form toolname>), instead of letting agents scrape the DOM and simulate clicks. Use when building, reviewing, or migrating a web app so agents (in-page assistants with Gemini Nano / Prompt API, browser agents, extensions) can use it reliably and safely. Also use when users mention WebMCP, document.modelContext, registerTool, toolname/tooldescription, toolautosubmit, agentInvoked, consequentialHint, readOnlyHint, untrustedContentHint, MCP vs WebMCP, "agentic web", or "make my site work with agents", even if they do not say WebMCP.'
 ---
 
 # WebMCP: build an agentic web, for real
@@ -30,8 +30,7 @@ https://developer.chrome.com/docs/ai/webmcp and https://webmachinelearning.githu
 4. **Evaluate**: define the task as an API contract, record a baseline and the ideal result, and
    check with code or an LLM judge (evals), not with vibes.
 
-See `references/api.md` for the current API with code, and `references/migration.md` if the
-project uses the older API (`navigator.modelContext`, `provideContext`, `requestUserInteraction`).
+See `references/api.md` for the current API with code and how to test it.
 
 ## The 10 rules
 
@@ -59,8 +58,7 @@ project uses the older API (`navigator.modelContext`, `provideContext`, `request
 - Returning "ok" before the state changed, or returning raw HTML to the model.
 - Irreversible actions without `consequentialHint` and an on-screen confirmation.
 - Passing third-party text to the model without `untrustedContentHint`.
-- Using removed APIs: `navigator.modelContext.provideContext()`, `clearContext()`,
-  `unregisterTool()`, `execute(input, client)` + `client.requestUserInteraction()`.
+- Declarative forms that should run on their own (e.g. search) without `toolautosubmit`: the agent's call waits for a human submit.
 
 ## Report format
 
