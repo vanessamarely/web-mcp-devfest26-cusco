@@ -21,6 +21,23 @@ Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore
 | [`docs/`](docs) | Cambios de WebMCP respecto a charlas anteriores. |
 | [`skills/webmcp-agentic-web/`](skills/webmcp-agentic-web) | **Skill para tu agente de código**: vuelve agéntica tu web con WebMCP (intenciones → tools, las 10 reglas, seguridad, migración desde la API vieja). |
 
+## Interacción con el público
+
+| Qué | Cómo funciona |
+|---|---|
+| **Unirse** | QR grande en el slide 2 y un QR pequeño “Únete” abajo a la izquierda en cada slide (tecla **J** lo oculta). Apodo cusqueño único; si se repite, se numera. |
+| **Podio** | 3 preguntas: 500 por acierto + hasta 500 por rapidez (hora del servidor). Bonos con tope (máx. 400): +100 por entrar antes del capítulo 01, +100 por publicar tu chasqui, +100 por una pregunta sobre el tema, +10 por reacción (máx. +100). Para entrar al podio hay que acertar al menos una. Los 3 primeros ven “¡Entraste al podio!” con su lugar y un código para reclamar el premio. |
+| **Muro de chasquis** | Tarjetas grandes con pocos chasquis; mosaico que cabe completo + chasqui destacado que rota con la sala llena (probado con 300). |
+| **Reacciones con efecto** | Si la sala manda muchas iguales en pocos segundos: 🔥 un chasqui cruza corriendo, 🤯 vuela el cóndor, ❤️ aparece el Inti. Ensayo: `deckBurst('fire')` en la consola del deck. |
+| **Preguntas** | Solo sobre el tema (se elige un tema y un filtro revisa el texto antes de enviarlo). No se proyectan; la presentadora las ve con **Q**. |
+| **Memoria** | En el último slide cada persona descarga PDF, HTML o Markdown con el resumen, sus notas y su chasqui (las notas nunca salen del celular). |
+
+### Antes de la charla
+1. Abre el deck con `?presenter=1` → menú → **Presentar en vivo (GitHub)** → aparece **EN VIVO**.
+2. Menú → **Vaciar sesión en vivo…** si quedaron datos de ensayo → **Cargar respuestas del podio…** (`slides/answers.json`, no versionado).
+3. Para ensayar usa `?session=ensayo1`: no toca la sesión real. No avances al capítulo 01 en la sesión real antes de empezar (cierra el bono “llegar a tiempo”).
+4. Demo con WebMCP nativo: registra un token de [Origin Trial](https://developer.chrome.com/origintrials) para `webmcp-cusco-demo.web.app` y pégalo en `demo/index.html`. Sin token, la demo usa un polyfill fiel a la API actual.
+
 ## Skill para tu agente de código
 
 La skill [`webmcp-agentic-web`](skills/webmcp-agentic-web/SKILL.md) convierte la charla en una guía que tu agente (Claude Code, Gemini CLI, Antigravity, Cursor…) aplica en tu proyecto: identifica las intenciones de tu app, crea las tools (formularios declarativos y `registerTool`), aplica las 10 reglas (validación en código, `consequentialHint`, `untrustedContentHint`) y migra código que use `navigator.modelContext`, `provideContext` o `requestUserInteraction`.
