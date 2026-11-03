@@ -311,6 +311,32 @@
         </div>
         <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
       </section>
+      <section data-id="devtools-webmcp" data-label="DevTools · WebMCP">
+        <div class="frame card-frame">
+          <p class="eyebrow">// Chrome DevTools · Application → WebMCP · flag #enable-webmcp-testing</p>
+          <h2 class="title">Depura tus tools en <span class="hl">DevTools</span></h2>
+          <div class="dt-wrap">
+            <div class="devtools" aria-label="Recreación del panel WebMCP de Chrome DevTools con las tools de la demo">
+              <aside class="dt-side"><p>Application</p><span>Manifest</span><span>Service workers</span><span>Storage</span><span class="on">WebMCP</span></aside>
+              <div class="dt-main">
+                <div class="dt-bar"><span class="dt-filter">Filter</span><span>Tool types ▾</span><span>Status types ▾</span></div>
+                <p class="dt-h">Tool Activity</p>
+                <ol class="dt-log reveal"><li style="--i: 0"><span class="dt-st completed">Completed</span><code>buscar_experiencias</code><span class="dt-io">{ "zona": "Machu Picchu" }</span><span class="dt-io out">{"total":2,"resultados":[…]}</span></li><li style="--i: 1"><span class="dt-st completed">Completed</span><code>agregar_a_ruta</code><span class="dt-io">{ "id": "mp-clasico", "dia": 2, "personas": 2 }</span><span class="dt-io out">Agregada: Machu Picchu…</span></li><li style="--i: 2"><span class="dt-st error">Error</span><code>agregar_a_ruta</code><span class="dt-io">{ "id": "mo-vinicunca", "dia": 1 }</span><span class="dt-io out">Error: Aclimatación…</span></li><li style="--i: 3"><span class="dt-st completed">Completed</span><code>reservar_ruta</code><span class="dt-io">{ "version": 9, "titular": "Vanessa" }</span><span class="dt-io out">Reserva confirmada: CHQ-…</span></li></ol>
+                <p class="dt-h">Available Tools <small>8</small></p>
+                <ul class="dt-tools"><li><code>agregar_a_ruta</code><span class="dt-type">Imperativa</span><span class="dt-count">3</span></li><li><code>buscar_experiencias</code><span class="dt-type">Declarativa</span><span class="dt-count">2</span></li><li><code>depurar_estado</code><span class="dt-type">Imperativa</span><span class="dt-count">0</span></li><li><code>leer_resenas</code><span class="dt-type">Imperativa</span><span class="dt-count">1</span></li><li><code>quitar_de_ruta</code><span class="dt-type">Imperativa</span><span class="dt-count">0</span></li><li><code>reservar_ruta</code><span class="dt-type">Imperativa</span><span class="dt-count">1</span></li><li><code>ver_experiencia</code><span class="dt-type">Imperativa</span><span class="dt-count">0</span></li><li><code>ver_ruta</code><span class="dt-type">Imperativa</span><span class="dt-count">2</span></li></ul>
+                <div class="dt-run"><code>ver_ruta</code><span>{ }</span><button type="button" tabindex="-1">Run tool</button></div>
+                <p class="dt-note">Recreación con las tools de la demo · ábrelo en vivo: Chrome + flag, Application → WebMCP</p>
+              </div>
+            </div>
+            <div class="stack side-notes reveal">
+              <div class="box blue" style="--i: 4"><h3 class="ic"><i data-lucide="list"></i> Available Tools</h3><p>Lo que ve el agente: nombre, descripción, tipo y cuántas veces se llamó.</p></div>
+              <div class="box green" style="--i: 5"><h3 class="ic"><i data-lucide="activity"></i> Tool Activity</h3><p>Estado, entrada y salida de cada llamada. Filtra por tipo y estado.</p></div>
+              <div class="box yellow" style="--i: 6"><h3 class="ic"><i data-lucide="play"></i> Run tool</h3><p>Ejecútala a mano, sin agente. Los errores de schema aparecen aquí.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
+      </section>
 
       <!-- ═════════════ QUÉ CAMBIÓ ═════════════ -->
       <section data-id="que-cambio" data-label="Lo que cambió">
@@ -398,7 +424,7 @@
             <div class="case blue" style="--i: 0"><span class="ico"><i data-lucide="globe"></i></span><h3>Agentes del navegador</h3><p>Usan tu sitio sin scraping. Prueba con <b>Model Context Tool Inspector</b>.</p></div>
             <div class="case green" style="--i: 1"><span class="ico"><i data-lucide="cpu"></i></span><h3>Tu asistente in-page</h3><p><b>Gemini Nano</b> (Prompt API): sin servidor, sin API key, datos en el equipo.</p></div>
             <div class="case yellow" style="--i: 2"><span class="ico"><i data-lucide="mic"></i></span><h3>Voz y accesibilidad</h3><p>“Agrega lo de siempre” = 1 tool, no 12 clics.</p></div>
-            <div class="case red" style="--i: 3"><span class="ico"><i data-lucide="bug"></i></span><h3>QA y debugging</h3><p><code>annotations.debugging</code> para que tu agente de código vea el estado.</p></div>
+            <div class="case red" style="--i: 3"><span class="ico"><i data-lucide="bug"></i></span><h3>QA y debugging</h3><p>Panel <b>WebMCP</b> de DevTools y <code>annotations.debugging</code>.</p></div>
             <div class="case" style="--i: 4"><span class="ico"><i data-lucide="layers"></i></span><h3>Widgets de otros orígenes</h3><p>Un iframe con <code>allow="tools"</code> expone tools con <code>exposedTo</code>.</p></div>
           </div>
         </div>
@@ -458,7 +484,7 @@
           <div class="clip-grid">
             <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/webmcp.webm" poster="/clips/webmcp.png"></video></figure>
             <div class="clip-side reveal">
-              <div class="stats" style="--i: 0"><div class="stat good"><b>5</b><span>llamadas</span></div><div class="stat good"><b>~1,1 K</b><span>tokens leídos</span></div></div>
+              <div class="stats" style="--i: 0"><div class="stat good"><b>5</b><span>llamadas</span></div><div class="stat good"><b>~1,2 K</b><span>tokens leídos</span></div></div>
               <ul class="clip-points" style="--i: 1"><li>buscar_experiencias es el <b>formulario declarativo</b></li><li>agregar_a_ruta ×2 con argumentos tipados</li><li>ver_ruta: confirma el <b>estado real</b></li></ul>
             </div>
           </div>

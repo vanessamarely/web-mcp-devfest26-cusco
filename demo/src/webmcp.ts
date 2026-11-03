@@ -122,6 +122,15 @@ function registerDeclarativeForms(mc: ModelContextPolyfill) {
             if (field) field.value = String(v);
           }
           form.classList.add('tool-form-active');
+          // Igual que Chrome: sin toolautosubmit, el agente rellena el formulario y ESPERA a que la
+          // persona lo envíe (humano en el bucle). Con toolautosubmit, se envía solo.
+          if (!form.hasAttribute('toolautosubmit')) {
+            form.addEventListener('submit', (e) => {
+              Object.assign(e, { agentInvoked: true, respondWith: (p: Promise<unknown>) => void p.then(resolve, (err) => resolve(`Error: ${err}`)) });
+              form.classList.remove('tool-form-active');
+            }, { once: true, capture: true });
+            return;
+          }
           let responded = false;
           const ev = new SubmitEvent('submit', { cancelable: true, bubbles: true });
           Object.assign(ev, {

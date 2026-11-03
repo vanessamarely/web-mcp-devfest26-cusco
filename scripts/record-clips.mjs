@@ -70,7 +70,8 @@ const SCENES = {
 };
 
 const which = process.argv.slice(2);
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+// WebMCP NATIVO de Chrome (equivale a chrome://flags/#enable-webmcp-testing).
+const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--enable-features=WebMCPTesting'] });
 for (const [name, scene] of Object.entries(SCENES)) {
   if (which.length && !which.includes(name)) continue;
   rmSync(TMP, { recursive: true, force: true });

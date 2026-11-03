@@ -36,7 +36,7 @@ Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore
 1. Abre el deck con `?presenter=1` → menú → **Presentar en vivo (GitHub)** → aparece **EN VIVO**.
 2. Menú → **Vaciar sesión en vivo…** si quedaron datos de ensayo → **Cargar respuestas del podio…** (`slides/answers.json`, no versionado).
 3. Para ensayar usa `?session=ensayo1`: no toca la sesión real. No avances al capítulo 01 en la sesión real antes de empezar (cierra el bono “llegar a tiempo”).
-4. Demo con WebMCP nativo: registra un token de [Origin Trial](https://developer.chrome.com/origintrials) para `webmcp-cusco-demo.web.app` y pégalo en `demo/index.html`. Sin token, la demo usa un polyfill fiel a la API actual.
+4. Demo con WebMCP **nativo**: en tu Chrome (probado en 156) activa `chrome://flags/#enable-webmcp-testing` y abre DevTools → **Application → WebMCP** para ver las 8 tools, su actividad y ejecutarlas con **Run tool**. Quien abra la demo sin el flag usa un polyfill fiel a la API actual (no hace falta token).
 
 ## Skill para tu agente de código
 

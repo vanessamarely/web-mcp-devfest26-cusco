@@ -69,7 +69,7 @@ await document.modelContext.registerTool({
 
 controller.abort();                       // y la tool desaparece`;
 
-export const CODE_DECLARATIVE = `<form toolname="buscar_experiencias"
+export const CODE_DECLARATIVE = `<form toolname="buscar_experiencias" toolautosubmit
       tooldescription="Busca experiencias en Cusco por zona y presupuesto">
   <select name="zona" toolparamdescription="Zona de Cusco">
     <option>Machu Picchu</option> <option>Valle Sagrado</option>
@@ -283,11 +283,27 @@ export const SLIDES: SlideContent[] = [
     summary: [
       'toolname y tooldescription en un <form> lo registran como tool; toolparamdescription describe cada campo.',
       'SubmitEvent.agentInvoked es true cuando lo envía un agente; con preventDefault() + respondWith(promesa) devuelves el resultado al modelo.',
-      'toolautosubmit envía el formulario sin esperar al usuario. CSS :tool-form-active y :tool-submit-active muestran qué está usando el agente.',
+      'Sin toolautosubmit, Chrome rellena el formulario y ESPERA a que la persona lo envíe (humano en el bucle); con toolautosubmit se envía solo (ideal para búsquedas). CSS :tool-form-active y :tool-submit-active muestran qué está usando el agente.',
     ],
     code: { file: 'demo/index.html', text: CODE_DECLARATIVE },
     notes: 'Es la forma más barata de empezar: tus formularios existentes. Si quitas toolname o tooldescription, la tool se desregistra.',
     time: '10:30',
+    inSummary: true,
+  },
+  {
+    id: 'devtools-webmcp',
+    label: 'DevTools · WebMCP',
+    kind: 'content',
+    section: S2,
+    title: 'Depura tus tools en Chrome DevTools: Application → WebMCP',
+    summary: [
+      'Chrome DevTools trae un panel WebMCP en Application (activa chrome://flags/#enable-webmcp-testing): muestra las tools registradas en la página tal como las ve el agente.',
+      'Tool Activity: cada llamada del agente con su estado (Completed, Canceled, In progress, Error), la entrada y la salida. Filtra por tipo (declarativa o imperativa) y por estado.',
+      'Run tool: ejecuta una tool a mano con tus propios parámetros, sin agente. Los errores de schema aparecen en la salida.',
+      'Para tu agente de código: Chrome DevTools MCP con --categoryExperimentalWebmcp agrega list_webmcp_tools y execute_webmcp_tool.',
+    ],
+    notes: 'Abre el panel en vivo si puedes (Chrome 156 + flag): Application → WebMCP con la demo cargada. Muestra las 8 tools, ejecuta ver_ruta con Run tool y señala el registro de actividad. Si no hay tiempo, el slide recrea el panel con las tools de la demo.',
+    time: '11:30',
     inSummary: true,
   },
   {
@@ -303,7 +319,7 @@ export const SLIDES: SlideContent[] = [
       'executeTool(tool, objeto): el input como texto JSON está obsoleto desde Chrome 155. Eventos toolchange, toolactivated y toolcancel en document.modelContext.',
     ],
     notes: 'Honestidad técnica: en Quito y en Debugging usamos navigator.modelContext, provideContext y requestUserInteraction. El borrador del 27 de octubre de 2026 ya no los tiene. Por eso es experimental: verifiquen siempre la documentación oficial.',
-    time: '11:30',
+    time: '12:15',
     inSummary: true,
   },
   {
@@ -315,7 +331,7 @@ export const SLIDES: SlideContent[] = [
     title: 'Pregunta 2 · La API de WebMCP',
     summary: ['Una tool registrada con registerTool(tool, { signal }) se quita abortando ese AbortSignal: controller.abort().'],
     notes: 'Pregunta trampa para quien vio charlas anteriores: provideContext y clearContext ya no existen. Revela con V.',
-    time: '12:45',
+    time: '13:00',
     inSummary: true,
   },
   {
@@ -368,7 +384,7 @@ export const SLIDES: SlideContent[] = [
       'Que agentes del navegador y extensiones usen tu sitio sin scraping (pruébalo con Model Context Tool Inspector).',
       'Tu propio asistente dentro de la página con Gemini Nano (Prompt API): sin servidor, sin API key, los datos no salen del equipo.',
       'Voz y accesibilidad: "agrega lo de siempre" se vuelve una llamada a una tool, no 12 clics.',
-      'QA y debugging: tools con annotations.debugging para que tu agente de código inspeccione el estado. Y widgets de otros orígenes con exposedTo.',
+      'QA y debugging: el panel WebMCP de DevTools y tools con annotations.debugging para que tu agente de código inspeccione el estado. Y widgets de otros orígenes con exposedTo.',
     ],
     notes: 'Si alguien pregunta "¿quién usa esto hoy?": es Origin Trial. El valor hoy es preparar tu sitio y tu propio asistente in-page; mañana, cualquier agente del navegador.',
     time: '15:45',
@@ -414,7 +430,7 @@ export const SLIDES: SlideContent[] = [
     title: 'Demo 1 · El agente con WebMCP',
     summary: [
       'Descubre las tools con getTools() y las llama con executeTool(): buscar_experiencias (el formulario declarativo), agregar_a_ruta ×2 y ver_ruta.',
-      '5 llamadas y ~1.100 tokens: solo lee nombres, schemas y resultados.',
+      '5 llamadas y ~1.200 tokens: solo lee nombres, schemas y resultados.',
       'El formulario se marca mientras el agente lo usa (:tool-form-active) y la UI se actualiza: la persona ve lo que pasó.',
     ],
     notes: 'Señala el timeline verde: cada paso es una tool con argumentos tipados. Destaca que termina con ver_ruta: confirma el estado real, no adivina.',
@@ -429,7 +445,7 @@ export const SLIDES: SlideContent[] = [
     title: 'Demo 2 · El mismo encargo, a punta de clics',
     summary: [
       'El agente lee la página completa en cada paso, busca botones por su texto y mueve un cursor.',
-      '22 pasos y ~16.000 tokens para lo mismo: unas 15 veces más lectura.',
+      '22 pasos y ~16.000 tokens para lo mismo: unas 13 veces más lectura.',
       'Al final no puede verificar el estado de la app: solo ve la pantalla.',
     ],
     notes: 'Deja que el video corra. "Funciona… esta vez. Pero miren cuánto lee y cuántos pasos da."',

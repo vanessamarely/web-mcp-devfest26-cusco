@@ -57,7 +57,7 @@ controller.abort(); // unregisters the tool (in-flight executions are not cancel
 ```
 
 - Removing `toolname` or `tooldescription` unregisters the tool.
-- `toolautosubmit` submits without waiting for the user.
+- `toolautosubmit` submits without waiting for the user; without it the browser fills the form and waits for a human submit.
 - CSS: `form:tool-form-active`, `:tool-submit-active` (put them in their own rules: unknown pseudo-classes invalidate a whole selector list).
 
 ## Discovery and events (in-page agents, tooling)
@@ -88,6 +88,11 @@ const raw = await session.prompt(userMessage, {
 ```
 
 ## Testing
+
+- **Chrome DevTools → Application → WebMCP** (Chrome 149+, with `chrome://flags/#enable-webmcp-testing`): *Available Tools* (what the agent sees, declarative/imperative, invocation counters), *Tool Activity* (status Completed/Canceled/In progress/Error, input and output, filters by tool type and status) and **Run tool** to execute a tool manually; schema mismatches show up in the output.
+- **Chrome DevTools MCP** for coding agents: start it with `--categoryExperimentalWebmcp` (`"args": ["chrome-devtools-mcp@latest", "--categoryExperimentalWebmcp"]`) to get `list_webmcp_tools` and `execute_webmcp_tool`.
+- **Declarative forms**: without `toolautosubmit`, Chrome fills the form and waits for the user to submit it (the agent's call stays pending until then). Add `toolautosubmit` for safe actions such as search; leave it off when a human should review before submitting.
+- **Automated tests**: launch Chrome with `--enable-features=WebMCPTesting` (same as the flag) to test the native API headlessly.
 
 - Chrome with `chrome://flags/#enable-webmcp-testing` or an Origin Trial token.
 - Model Context Tool Inspector extension (Chrome Web Store, needs a Gemini API key).

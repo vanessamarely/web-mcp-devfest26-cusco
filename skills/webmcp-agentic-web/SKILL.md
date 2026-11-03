@@ -66,5 +66,5 @@ project uses the older API (`navigator.modelContext`, `provideContext`, `request
 
 When you add or review WebMCP in a project, report: the intents found, the tools (name,
 annotations, declarative/imperative), what was validated in code, which actions require
-confirmation, and how it was tested (browser with the flag/Origin Trial, Model Context Tool
-Inspector, or an in-page agent with Gemini Nano).
+confirmation, and how it was tested (Chrome with the flag and DevTools → Application → WebMCP,
+Chrome DevTools MCP with `--categoryExperimentalWebmcp`, or an in-page agent with Gemini Nano).

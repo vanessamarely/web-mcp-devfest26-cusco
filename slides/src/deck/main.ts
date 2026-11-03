@@ -2,6 +2,9 @@
 // decoraciones (chasquis, checklist, código) y la conexión en vivo con el público y la consola.
 import {
   Accessibility,
+  Activity,
+  List,
+  Play,
   Bot,
   Check,
   Hand,
@@ -275,7 +278,7 @@ setTimeout(() => {
 renderMenuList();
 
 createIcons({
-  icons: { Accessibility, Bot, Check, Hand, MessageSquareWarning, User, ArrowUpRight, Bug, Cable, Camera, CirclePlay, Code, Cpu, Database, Download, Eye, FileCode, Flag, FlaskConical, GitBranch, Globe, Layers, Map: MapIcon, MessageSquareText, Mic, MousePointerClick, NotebookPen, ScanEye, ShieldCheck, Trophy, Users, Wrench },
+  icons: { Accessibility, Activity, List, Play, Bot, Check, Hand, MessageSquareWarning, User, ArrowUpRight, Bug, Cable, Camera, CirclePlay, Code, Cpu, Database, Download, Eye, FileCode, Flag, FlaskConical, GitBranch, Globe, Layers, Map: MapIcon, MessageSquareText, Mic, MousePointerClick, NotebookPen, ScanEye, ShieldCheck, Trophy, Users, Wrench },
   attrs: { 'stroke-width': 1.75, 'aria-hidden': 'true' },
 });
 dispatchEvent(new Event('tweakchange'));
