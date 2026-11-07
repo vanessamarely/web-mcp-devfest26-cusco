@@ -875,3 +875,28 @@ section:has(.join-notch) .footer { left: 114px; }
 .thanks-gloss b { font-size: 34px; line-height: 1; padding: 4px 14px; border: var(--lw) solid var(--line); border-radius: var(--pill); background: var(--ht-yellow); color: #1e1e1e; }
 .thanks-gloss span { font: var(--mono-w) 17px var(--mono); color: var(--ink-dim); }
 :root[data-ratio='4-3'] .thanks-gloss b { font-size: 28px; }
+
+/* ═════════════ RESPONSIVE SIN SOLAPES (sitio público) ═════════════ */
+/* 4:3 (tablet vertical, proyector cuadrado): las montañas viven solo bajo los personajes. */
+/* Portada y cierre: las montañas viven solo bajo los personajes, nunca detrás del texto. */
+.cover .apus { left: auto; width: calc(var(--cover-art, 40%) + 6%); }
+@media (max-width: 640px) {
+  /* El logo GDG deja de flotar: va al final del contenido, sin tapar nada. */
+  .notch { position: relative; right: auto; bottom: auto; width: 120px; height: 52px; margin: -56px 20px 76px auto; border: var(--lw) solid var(--line); border-radius: 16px; }
+  .notch img, .notch svg { width: 80px; }
+  /* Capítulos: el arte del chasqui va debajo del texto, en su propio bloque. */
+  .section-slide .frame { padding-bottom: 28px; min-height: 0; }
+  .section-slide .section-art { position: relative; inset: auto; width: 100%; height: 300px; }
+  /* Portada y cierre: texto arriba, montañas + Inti + chasquis abajo, en la misma celda. */
+  .cover { display: grid; grid-template-rows: max-content 320px 80px; align-content: start; }
+  .cover .apus { left: 0; width: 100% !important; }
+  .cover .cover-landmark { overflow: hidden; }
+  .cover .cover-frame { grid-row: 1; grid-column: 1; position: relative; inset: auto; padding: 56px 18px 12px; min-height: 0; }
+  .cover .apus, .cover .cover-landmark, .cover .cover-chasquis { grid-row: 2; grid-column: 1; position: relative; inset: auto; width: 100%; height: 100%; }
+  .cover .apus { height: 70%; align-self: end; }
+  .cover .cover-chasquis { height: 85%; align-self: end; }
+  .cover .awana.bottom { grid-row: 3; grid-column: 1; position: relative; inset: auto; align-self: end; }
+  .thanks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; width: 100%; }
+  .thanks-grid .qr-card { width: auto !important; }
+  .thanks-grid .qr-card > div:first-child { width: 100% !important; max-width: 150px; }
+}
