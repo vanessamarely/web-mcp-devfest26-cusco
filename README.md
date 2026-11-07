@@ -1,6 +1,6 @@
 # WebMCP en acción
 
-Charla técnica para **DevFest Cusco 2026** (30 min) de [Vanessa Aristizabal](https://github.com/vanessamarely). Qué es MCP, qué es WebMCP y cómo hacer, de verdad, una web agéntica.
+Charla técnica para **DevFest Cusco 2026** (25 min) de [Vanessa Aristizabal](https://github.com/vanessamarely). Qué es MCP, qué es WebMCP y cómo hacer, de verdad, una web agéntica.
 
 ## En vivo
 
@@ -15,7 +15,7 @@ Proyecto Firebase: `webmcp-cusco` (Hosting x2 + Firestore con [reglas](firestore
 
 | Carpeta | Qué es |
 |---|---|
-| [`slides/`](slides) | Deck (32 slides) con proporciones **4:3 · 16:10 · 16:9 · 21:9 · extendida** (tecla **A**/**E**), claro/oscuro (**L**), alto contraste (**H**). Consola en `/presenter/` (**P**). App de asistentes en `/live/`: apodos únicos para 300+ personas (con numeración si se repiten), 3 preguntas por el podio, **crea tu chasqui** (PNG), notas y memoria en **PDF / HTML / Markdown**. |
+| [`slides/`](slides) | Deck (30 slides) con proporciones **4:3 · 16:10 · 16:9 · 21:9 · extendida** (tecla **A**/**E**), claro/oscuro (**L**), alto contraste (**H**). Consola en `/presenter/` (**P**). App de asistentes en `/live/`: apodos únicos para 300+ personas (con numeración si se repiten), 3 preguntas por el podio, **crea tu chasqui** (PNG), notas y memoria en **PDF / HTML / Markdown**. |
 | [`demo/`](demo) | **Ruta Chasqui**: marketplace de experiencias en Cusco (precios ficticios) con 8 tools de WebMCP (1 declarativa). Agente con WebMCP (Gemini Nano o simulado) vs. agente de clics, botón **Rediseñar** y seguridad (`untrustedContentHint`, `consequentialHint`). |
 | [`scripts/record-clips.mjs`](scripts/record-clips.mjs) | Graba los clips de la demo que se muestran en los slides. |
 | [`skills/webmcp-agentic-web/`](skills/webmcp-agentic-web) | **Skill para tu agente de código**: vuelve agéntica tu web con WebMCP (intenciones → tools, las 10 reglas, seguridad, cómo probar). |

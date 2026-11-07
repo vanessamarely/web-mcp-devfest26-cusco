@@ -416,25 +416,6 @@
       </section>
 
       <!-- ═════════════ RECETA ═════════════ -->
-      <section data-id="receta" data-label="Receta en 5 pasos">
-        <div class="frame card-frame">
-          <p class="eyebrow">// Basado en las best practices oficiales de Chrome</p>
-          <h2 class="title">Tu web agéntica en <span class="hl">5 postas</span></h2>
-          <div class="road">
-            <div class="road-line" aria-hidden="true"></div>
-            <div class="road-runner" data-runner="3" aria-hidden="true"></div>
-            <div class="postas reveal">
-              <div class="posta" style="--i: 0"><span class="n">1</span><b>Inventario de intenciones</b><small>¿Qué viene a hacer la gente?</small></div>
-              <div class="posta" style="--i: 1"><span class="n">2</span><b>Una tool por intención</b><small>verbo exacto: reservar_ruta</small></div>
-              <div class="posta" style="--i: 2"><span class="n">3</span><b>Un solo servicio</b><small>UI, tools y tests: la misma lógica</small></div>
-              <div class="posta" style="--i: 3"><span class="n">4</span><b>Marca lo irreversible</b><small>consequentialHint + confirmación</small></div>
-              <div class="posta" style="--i: 4"><span class="n">5</span><b>Mide con evals</b><small>línea base, ideal y checks</small></div>
-            </div>
-          </div>
-          <p class="small muted road-note">Como los chasquis: cada posta entrega el encargo completo a la siguiente.</p>
-        </div>
-        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
-      </section>
 
       <!-- ═════════════ DEMO ═════════════ -->
       <section data-id="demo" data-label="Demo · Ruta Chasqui">
@@ -511,7 +492,7 @@
             <figure class="clip"><video muted loop playsinline preload="none" data-src="/clips/seguridad.webm" poster="/clips/seguridad.png"></video></figure>
             <div class="clip-side reveal">
               <div class="stats" style="--i: 0"><div class="stat good"><b>↺</b><span>se corrige solo</span></div><div class="stat warn"><b>⚠</b><span>reseña ignorada</span></div></div>
-              <ul class="clip-points" style="--i: 1"><li>“Error: Aclimatación…” → mueve Vinicunca a otro día</li><li><code>untrustedContentHint</code>: la reseña es datos, no órdenes</li><li><code>consequentialHint</code>: la persona confirma la reserva</li></ul>
+              <ul class="clip-points" style="--i: 1"><li>“Error: Aclimatación…” → mueve Vinicunca a otro día</li><li><code>untrustedContentHint</code>: la reseña es datos, no órdenes</li><li><code>consequentialHint</code>: la persona confirma la reserva</li><li>Iframes: <code>allow="tools"</code> y <code>exposedTo</code>; <code>readOnlyHint</code> en lo que solo lee</li></ul>
             </div>
           </div>
         </div>
@@ -519,25 +500,6 @@
       </section>
 
       <!-- ═════════════ SEGURIDAD ═════════════ -->
-      <section data-id="seguridad" data-label="Seguridad">
-        <div class="frame card-frame">
-          <p class="eyebrow">// Andén 3 · confiable</p>
-          <h2 class="title">El camino de una llamada <span class="hl">segura</span></h2>
-          <div class="guard reveal">
-            <div class="g-step" style="--i: 0"><span class="ico"><i data-lucide="bot"></i></span><b>Agente</b><small>pide reservar_ruta</small></div>
-            <div class="g-step" style="--i: 1"><span class="ico"><i data-lucide="globe"></i></span><b>Navegador</b><small>schema + Permissions Policy <code>tools</code></small></div>
-            <div class="g-step" style="--i: 2"><span class="ico"><i data-lucide="code"></i></span><b>Tu tool</b><small>valida en código + versión del estado</small></div>
-            <div class="g-step warn" style="--i: 3"><span class="ico"><i data-lucide="hand"></i></span><b>consequentialHint</b><small>la persona confirma en pantalla</small></div>
-            <div class="g-step ok" style="--i: 4"><span class="ico"><i data-lucide="check"></i></span><b>Acción</b><small>y la UI muestra el cambio</small></div>
-          </div>
-          <div class="guard-side reveal">
-            <div class="box red" style="--i: 5"><h3 class="ic"><i data-lucide="message-square-warning"></i> untrustedContentHint</h3><p>Reseñas, correos, texto de terceros: son <b>datos</b>, no órdenes.</p></div>
-            <div class="box blue" style="--i: 6"><h3 class="ic"><i data-lucide="layers"></i> Otros orígenes</h3><p>Iframes con <code>allow="tools"</code> y <code>exposedTo</code> solo a quien elijas.</p></div>
-            <div class="box green" style="--i: 7"><h3 class="ic"><i data-lucide="eye"></i> readOnlyHint</h3><p>Lo que solo lee, decláralo: el agente sabe que no cambia nada.</p></div>
-          </div>
-        </div>
-        <div class="notch"><img src="/brand/logo-gdg-stacked.svg" alt="Google Developer Groups" /></div>
-      </section>
 
       <!-- ═════════════ PREGUNTA 3 ═════════════ -->
       <section data-id="q3" data-label="Pregunta 3 · Web agéntica" data-q="q3" class="poll-slide">

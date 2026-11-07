@@ -85,7 +85,7 @@ addEventListener('keydown', (e) => {
   }
 });
 
-// ── Cronómetro (30 min) y ritmo vs. el guion ───────────────────────────
+// ── Cronómetro (25 min) y ritmo vs. el guion (±30 s = a tiempo) ───────────────────────────
 const KEY = `${NS}.timer.${SESSION_ID}`;
 let startedAt: number | null = null;
 try {
@@ -103,8 +103,8 @@ function updatePace() {
   const c = SLIDES[index];
   if (!startedAt || !c) return void (pace.textContent = '');
   const diff = (Date.now() - startedAt) / 1000 - toSec(c.time);
-  pace.className = `pace ${Math.abs(diff) < 60 ? 'ok' : diff > 0 ? 'late' : 'early'}`;
-  pace.textContent = Math.abs(diff) < 60 ? 'a tiempo' : diff > 0 ? `+${mmss(diff)} tarde` : `${mmss(-diff)} adelantada`;
+  pace.className = `pace ${Math.abs(diff) < 30 ? 'ok' : diff > 0 ? 'late' : 'early'}`;
+  pace.textContent = Math.abs(diff) < 30 ? 'a tiempo' : diff > 0 ? `+${mmss(diff)} tarde` : `${mmss(-diff)} adelantada`;
 }
 function tick() {
   $('[data-clock]').textContent = startedAt ? mmss((Date.now() - startedAt) / 1000) : '00:00';
