@@ -15,6 +15,7 @@ import { QUESTIONS, type QuestionId } from '../shared/questions';
 import { REACTIONS, correctCount, getRealtime, podiumKey, winnerCode, type Reaction, type Realtime, type SlideState, type Votes } from '../shared/realtime';
 import { esc } from '../shared/esc';
 import { isOnTopic } from '../shared/ask';
+import { answerFromTalk, answerWithNano, nanoReady } from '../shared/ask-ai';
 
 const ICONS = { Brain, Check, Download, FileText, Flame, GitBranch, Heart, MessageCircleQuestion, NotebookPen, Radio, Send, Shuffle, Sparkles, SunMoon, Trophy, Map: MapIcon, X };
 const REACTION_ICONS: Record<Reaction, IconNode> = { fire: Flame, heart: Heart, mind: Brain, ask: MessageCircleQuestion };
@@ -740,7 +741,7 @@ function openAsk() {
   dlg.className = 'ask-sheet';
   dlg.innerHTML = `<form>
     <h2>${icon(MessageCircleQuestion, 22)} ¿Tienes una pregunta sobre la charla?</h2>
-    <p class="fine">Solo preguntas sobre <b>MCP, WebMCP y la web agéntica</b>. Le llegan a Vanessa con tu apodo${name ? ` <b>${esc(name)}</b>` : ''}; no se proyectan y las responde al final.</p>
+    <p class="fine">Solo preguntas sobre <b>MCP, WebMCP y la web agéntica</b>. Le llegan a Vanessa con tu apodo${name ? ` <b>${esc(name)}</b>` : ''}; no se proyectan. Al enviar, la IA te da una primera respuesta en tu dispositivo y Vanessa responde al final.</p>
     <fieldset class="field"><legend>Tema</legend><div class="chips" role="radiogroup" aria-label="Tema">${ASK_TOPICS.map((tp, i) => `<button type="button" role="radio" aria-checked="${i === 1}" data-topic="${esc(tp)}">${esc(tp)}</button>`).join('')}</div></fieldset>
     <textarea name="q" rows="4" maxlength="280" required placeholder="Ej.: ¿Cómo marco una tool como irreversible en WebMCP?"></textarea>
     <p class="fine" data-ask-msg role="status"></p>
@@ -774,8 +775,8 @@ function openAsk() {
       await rt.ask({ name: name ?? 'Anónimo', text: `[${topic}] ${text}`.slice(0, 280), slide: (live?.label ?? '').slice(0, 80) });
       void rt.react('ask').catch(() => undefined);
       lastAsk = Date.now();
-      msg.textContent = '¡Enviada! Gracias.';
-      setTimeout(close, 1100);
+      msg.textContent = '';
+      void showAnswer(dlg, text, close);
     } catch (err) {
       console.error('[live] pregunta', err);
       sendBtn.disabled = false;
@@ -784,6 +785,55 @@ function openAsk() {
   });
   dlg.showModal();
   dlg.querySelector('textarea')!.focus();
+}
+
+// Markdown mínimo de la respuesta de Nano: bloques ```código```, `código` y **negritas** (todo escapado).
+function miniMarkdown(md: string) {
+  return md
+    .split(/```[a-zA-Z]*\n?/)
+    .map((part, i) => (i % 2 ? `<pre><code>${esc(part.replace(/\n$/, ''))}</code></pre>` : esc(part).replace(/`([^`\n]+)`/g, '<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>')))
+    .join('');
+}
+
+// Respuesta inmediata en el dispositivo del asistente: Gemini Nano si está listo; si no, la charla.
+async function showAnswer(dlg: HTMLDialogElement, question: string, close: () => void) {
+  const form = dlg.querySelector('form')!;
+  const pollOpen = live?.kind === 'poll' && live.qid && !live.revealed?.[live.qid];
+  const nano = !pollOpen && (await nanoReady());
+  form.innerHTML = `<h2>${icon(Sparkles, 22)} Tu pregunta</h2>
+    <p class="ask-q">${esc(question)}</p>
+    <section class="ask-answer" aria-live="polite">
+      <p class="ask-src" data-src></p>
+      <div class="ask-text" data-text><span class="ask-dots" aria-label="Pensando"><i></i><i></i><i></i></span></div>
+    </section>
+    <p class="fine">✓ Vanessa también recibió tu pregunta${name ? ` como <b>${esc(name)}</b>` : ''} y la responderá al final.</p>
+    <div class="row"><button class="btn primary" type="button" data-done>Listo</button></div>`;
+  const src = $('[data-src]', form);
+  const out = $('[data-text]', form);
+  const ctrl = new AbortController();
+  const done = () => (ctrl.abort(), close());
+  $('[data-done]', form).addEventListener('click', done);
+  dlg.addEventListener('close', () => ctrl.abort(), { once: true });
+  const fallback = (why = '') => {
+    const a = answerFromTalk(question);
+    src.textContent = `Según la charla${why}`;
+    out.textContent = a || 'Esta no la cubre la charla tal cual: Vanessa la responde al final.';
+  };
+  if (pollOpen) {
+    src.textContent = 'Pregunta del podio en curso';
+    out.textContent = 'Te respondo cuando termine la pregunta del podio: así nadie juega con ventaja. Vanessa ya tiene tu pregunta.';
+    return;
+  }
+  if (!nano) return fallback();
+  src.textContent = 'Gemini Nano · en tu dispositivo, sin servidor';
+  try {
+    const a = await answerWithNano(question, (t) => (out.innerHTML = miniMarkdown(t)), ctrl.signal);
+    if (!a) fallback(' (Nano no respondió)');
+  } catch (err) {
+    if (ctrl.signal.aborted) return;
+    console.warn('[live] Gemini Nano', err);
+    fallback(' (Gemini Nano no pudo responder)');
+  }
 }
 
 void boot();
