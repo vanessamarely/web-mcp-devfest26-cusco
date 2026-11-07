@@ -1,6 +1,6 @@
 // Crea tu chasqui: avatar inspirado en los chasquis, los mensajeros del Tawantinsuyu que
 // corrían por el Qhapaq Ñan llevando quipus de posta en posta. El quipu era un mensaje
-// ESTRUCTURADO (cuerdas, colores y nudos) que cualquiera en la red sabía leer: la mejor
+// ESTRUCTURADO (cuerdas, colores y nudos) que los quipucamayoc sabían leer: la mejor
 // metáfora de una tool de WebMCP (nombre, descripción y JSON Schema).
 //
 // Todo se dibuja en el dispositivo con SVG (y canvas para el PNG): sin red, sin fotos.
@@ -52,7 +52,7 @@ export const ENCARGOS = [
 ] as const;
 
 export const LEYENDA =
-  'Los chasquis corrían por el Qhapaq Ñan llevando quipus de posta en posta: mensajes estructurados con cuerdas, colores y nudos que cualquiera en la red sabía leer. Hoy tus tools de WebMCP son el quipu, y los agentes, los nuevos chasquis.';
+  'Los chasquis corrían por el Qhapaq Ñan llevando quipus de posta en posta: registros con cuerdas, colores y nudos que los quipucamayoc, sus especialistas, sabían leer. Hoy tus tools de WebMCP son el quipu, y los agentes, los nuevos chasquis.';
 
 const INK = '#1e1e1e';
 const HAIR = '#2b2118';
