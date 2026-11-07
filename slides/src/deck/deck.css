@@ -857,3 +857,16 @@ section:has(.join-notch) .footer { left: 114px; }
 @media (max-width: 640px) { .dt-wrap, .devtools { grid-template-columns: 1fr; } .dt-side { display: none; } .dt-log li { grid-template-columns: 1fr; } .dt-tools { grid-template-columns: 1fr; } }
 .dt-note { margin: 2px 0 0; font: 400 11px var(--mono); color: #5f6368; text-align: right; }
 :root[data-ratio='4-3'] .dt-log li { grid-template-columns: 76px 156px minmax(0, 1fr) minmax(0, 1fr); }
+
+/* Nada se sale de una tarjeta: el código en línea y las palabras largas se parten si no caben. */
+.case, .box, .node, .lane, .posta, .g-step, .terrace, .door, .actor, .stat, .chg, .tool-chip, .qr-card { min-width: 0; }
+.card-frame :not(pre) > code, .case p, .case h3, .box p, .box h3, .node .d, .node .v, .posta small, .chg code { overflow-wrap: anywhere; }
+.terrace > div, .dt-main, .dt-bar > * { min-width: 0; }
+.terrace h3, .terrace p { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .dt-bar { flex-wrap: wrap; gap: 6px; }
+  .dt-filter { flex: 1 1 100%; }
+  .terrace { grid-template-columns: 44px 1fr; padding: 12px; }
+  .terrace .lvl { width: 40px; height: 40px; font-size: 20px; }
+}
+@media (max-width: 640px) { .devtools, .dt-main { max-width: 100%; overflow: hidden; } .dt-bar span { white-space: nowrap; } }

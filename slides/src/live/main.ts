@@ -170,6 +170,7 @@ function render() {
 async function freshOptions(): Promise<string[]> {
   const pool = new Set<string>();
   while (pool.size < 10) pool.add(randomName());
+  rt ??= await getRealtime(); // el menú puede abrirse antes de que termine de conectar
   const taken = await rt.takenNames([...pool]).catch(() => new Set<string>());
   const free = [...pool].filter((n) => !taken.has(n));
   return (free.length >= 3 ? free : [...pool]).slice(0, 3);
@@ -512,7 +513,7 @@ function bindKeepsake(root: ParentNode) {
       if (msg) msg.textContent = 'Listo: revisa tus descargas.';
     } catch (err) {
       console.error('[memoria] PDF', err);
-      if (msg) msg.textContent = 'No se pudo generar el PDF. Prueba con HTML.';
+      if (msg) msg.textContent = `No se pudo generar el PDF (${(err as Error)?.message ?? err}). Prueba con HTML.`;
     } finally {
       btn.disabled = false;
     }

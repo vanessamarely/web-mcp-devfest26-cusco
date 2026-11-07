@@ -21,7 +21,12 @@ const C = { blue: hex('#4285f4'), red: hex('#ea4335'), yellow: hex('#f9ab00'), g
 const SAFE: Record<string, string> = { '≤': '<=', '≥': '>=', '→': '->', '←': '<-', '↑': '^', '↓': 'v', '✓': 'OK', '✗': 'X', '≈': '~', '²': '^2', '⏱': '', '⏺': '*', '●': '*', '·': '·', '∥': '||', '♡': '', '♥': '', ' ': ' ' };
 const safe = (t: string) =>
   [...t.replace(/\s+/g, ' ')]
-    .map((ch) => SAFE[ch] ?? (ch.charCodeAt(0) <= 0xff || '–—‘’“”•…€™'.includes(ch) ? ch : ''))
+    // Solo lo que la Helvetica estándar (WinAnsi) sabe escribir: ASCII imprimible, Latin-1 y algunos signos.
+    .map((ch) => {
+      if (SAFE[ch] !== undefined) return SAFE[ch];
+      const c = ch.charCodeAt(0);
+      return (c >= 0x20 && c <= 0x7e) || (c >= 0xa0 && c <= 0xff) || '–—‘’“”•…€™'.includes(ch) ? ch : '';
+    })
     .join('');
 
 class Writer {
@@ -121,13 +126,16 @@ export async function keepsakePDF({ nickname, notes, chasqui }: KeepsakeInput): 
 
   // Mi chasqui
   if (chasqui) {
-    const png = await pdf.embedPng(await chasquiPNGDataUrl(chasqui.opts, 480));
+    // Si el navegador no puede convertir el dibujo a PNG, el PDF sale igual (sin la imagen).
+    const png = await chasquiPNGDataUrl(chasqui.opts, 480)
+      .then((url) => pdf.embedPng(url))
+      .catch((err) => (console.warn('[memoria] sin imagen del chasqui', err), null));
     const imgH = 150;
-    const imgW = (png.width / png.height) * imgH;
+    const imgW = png ? (png.width / png.height) * imgH : 0;
     w.ensure(imgH + 20);
     const top = w.y;
     w.page.drawRectangle({ x: M, y: top - imgH - 16, width: W - 2 * M, height: imgH + 16, color: C.pYellow, borderColor: INK, borderWidth: 0.8 });
-    w.page.drawImage(png, { x: M + 10, y: top - imgH - 8, width: imgW, height: imgH });
+    if (png) w.page.drawImage(png, { x: M + 10, y: top - imgH - 8, width: imgW, height: imgH });
     const tx = M + imgW + 28;
     const tw = W - M - tx - 12;
     w.y = top - 14;
