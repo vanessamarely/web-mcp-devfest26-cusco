@@ -870,3 +870,8 @@ section:has(.join-notch) .footer { left: 114px; }
   .terrace .lvl { width: 40px; height: 40px; font-size: 20px; }
 }
 @media (max-width: 640px) { .devtools, .dt-main { max-width: 100%; overflow: hidden; } .dt-bar span { white-space: nowrap; } }
+/* Cierre: "Sulpayki" siempre acompañado de "Gracias" en español */
+.thanks-gloss { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.thanks-gloss b { font-size: 34px; line-height: 1; padding: 4px 14px; border: var(--lw) solid var(--line); border-radius: var(--pill); background: var(--ht-yellow); color: #1e1e1e; }
+.thanks-gloss span { font: var(--mono-w) 17px var(--mono); color: var(--ink-dim); }
+:root[data-ratio='4-3'] .thanks-gloss b { font-size: 28px; }

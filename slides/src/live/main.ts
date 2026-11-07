@@ -540,7 +540,7 @@ function renderEnd(screen: HTMLElement) {
   const n = Object.keys(notes).length;
   screen.innerHTML = `<section class="card-sheet keepsake">
     <div class="weave-strip" aria-hidden="true"></div>
-    <p class="kicker">¡Sulpayki! · Gracias</p>
+    <p class="kicker">¡Sulpayki! (gracias en quechua)</p>
     <h1>Tu memoria de la charla</h1>
     <p class="muted">Un resumen con lo más importante de cada slide, tus notas${chasqui.saved ? ' y tu chasqui' : ''}. Se genera en tu celular; ábrelo sin internet o imprímelo.</p>
     <div class="stats"><span>${SLIDES.filter((s) => s.inSummary).length} ideas clave</span><span>${n} ${n === 1 ? 'nota' : 'notas'}</span><span>${chasqui.saved ? '1 chasqui' : 'sin chasqui'}</span></div>
